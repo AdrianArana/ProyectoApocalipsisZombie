@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 
 public class VentanaInicialController {
     public Button iniciarPartidaButton;
-    public Button CreditosButton;
     @FXML
     private Label welcomeText;
 
@@ -47,5 +46,11 @@ public class VentanaInicialController {
             e.printStackTrace();
         }
 
+    }
+
+    public void loadUserData(String nombreGuardadoString) {
+    }
+
+    public void setStage(Stage stage) {
     }
 }
