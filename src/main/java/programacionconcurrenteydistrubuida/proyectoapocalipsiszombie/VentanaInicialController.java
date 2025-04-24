@@ -10,13 +10,6 @@ import javafx.stage.Stage;
 
 public class VentanaInicialController {
     public Button iniciarPartidaButton;
-    @FXML
-    private Label welcomeText;
-
-    @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
-    }
 
     public void iniciarPartidaButtonClick(ActionEvent actionEvent) {
         Stage stageAntiguo = (Stage) iniciarPartidaButton.getScene().getWindow();

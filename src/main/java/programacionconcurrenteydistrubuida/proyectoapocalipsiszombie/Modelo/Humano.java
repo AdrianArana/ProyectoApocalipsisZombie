@@ -3,7 +3,7 @@ package programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo;
 public class Humano extends Thread {
     private String id; //H____
     Mapa mapa;
-
+    private boolean marcado;
     @Override
     public void run() {
 

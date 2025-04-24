@@ -8,7 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class NombreController {
+public class NombreController {////SEGUNDA VENTANA
 
     public TextField textFieldNombre;
     public Button continuarButton;
@@ -26,10 +26,10 @@ public class NombreController {
             Stage stageAnterior = (Stage) continuarButton.getScene().getWindow();
             stageAnterior.close();
             Stage stage = new Stage();
-            FXMLLoader fxmlLoader = new FXMLLoader(VistaPrincipal.class.getResource("ventanaConfiguracion.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(VistaPrincipal.class.getResource("ventanaPrincipal.fxml"));
             try {
                 Scene scene = new Scene(fxmlLoader.load(), 800, 650);
-                stage.setTitle("Configuración de parámetros");
+                stage.setTitle("Apocalipsis Zombie de..." + nombreGuardadoString.toUpperCase());
                 stage.setScene(scene);
                 //Aqui creamos el controlador de la ventana de configuracion y le guardamos la Data
                 VentanaPrincipalController ventanaPrincipalController = fxmlLoader.getController();

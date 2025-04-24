@@ -2,7 +2,7 @@ package programacionconcurrenteydistrubuida.proyectoapocalipsiszombie;
 
 import javafx.stage.Stage;
 
-public class VentanaPrincipalController {
+public class VentanaPrincipalController {////TERCERA VENTANA
 
     private Stage escenaPrincipal;
 

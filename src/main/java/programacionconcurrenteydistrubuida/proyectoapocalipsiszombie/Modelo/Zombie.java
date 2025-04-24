@@ -15,5 +15,6 @@ public class Zombie extends Thread {
                                     //lista.remove(humanomatado) y lista.add(zombinuevo) ZOMBIE CON ID Zhhhh del humano
                             //si pierde: (2/3posibilidades)
                                     //.start() de nuevo y le quitas la comida y se le marca
+
     }
 }

@@ -30,7 +30,20 @@ public class Mapa {
             void entrarZonaComedor(Humano humano) //Dentro de esta comer yestar un tiempo [3-5s]
             void salirZonaComedor(Humano humano)
             void entrarZonaComun(Humano humano) // y ya se pone a hacer cola para volver a salir
-
+        Funciones del zombie
+            void cambiarDeZona(int zonaInicial, int zonaDestino) // cambiar al zombie de una lista a otra
+            void atacar(
+                if (hay humanos) {
+                (for individuo in zonas[mizona]) la recorre
+                    elegir uno al azar
+                    le ataca
+                        if (gana) {
+                            le matamos (humano.interrupt (matarle) y metemos un zombie nuevo con su id)
+                        } else{
+                            le marcamos (humano.setMarcado(true) y humano.quitarComida())
+                        }
+                    }
+                else {salir de la funcion}
 
 
 
