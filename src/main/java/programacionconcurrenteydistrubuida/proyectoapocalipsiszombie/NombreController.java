@@ -6,7 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 public class NombreController {
-
+    //DSAIYGCGDAIYACGDIYCGDAIYIYCGDAICGDAYIYCGDA
     public TextField textFieldNombre;
     public Button continuarButton;
     public Button VolverButton;
