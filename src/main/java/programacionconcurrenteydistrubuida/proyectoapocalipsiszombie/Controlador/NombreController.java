@@ -1,4 +1,4 @@
-package programacionconcurrenteydistrubuida.proyectoapocalipsiszombie;
+package programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Controlador;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.VistaPrincipal;
 
 public class NombreController {
 
@@ -43,6 +44,27 @@ public class NombreController {
 
     }
 
-    public void onVolverButton(ActionEvent actionEvent) {
+
+    public void onVolverButtonClick(ActionEvent actionEvent) {
+
+        Stage stageAntiguo = (Stage) VolverButton.getScene().getWindow();
+        stageAntiguo.close();
+        Stage stage = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader(VistaPrincipal.class.getResource("ventanaInicial.fxml"));
+        try {
+            Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+            stage.setTitle("Ventana Inicial");
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
+
+
     }
 }
