@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.CreditosController">
+   <children>
+      <Text layoutX="96.0" layoutY="206.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Juego reaizado por Raúl Muñoz Yelamos y Adrián Arana Peña" />
+      <Button fx:id="VolverButton" layoutX="56.0" layoutY="312.0" mnemonicParsing="false" onAction="#onVolverButtonClick" text="Volver" />
+   </children>
+</AnchorPane>

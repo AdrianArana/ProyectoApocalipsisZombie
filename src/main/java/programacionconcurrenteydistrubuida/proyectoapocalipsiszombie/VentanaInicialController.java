@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 
 public class VentanaInicialController {
     public Button iniciarPartidaButton;
+    public Button CreditosButton;
     @FXML
     private Label welcomeText;
 
@@ -26,6 +27,20 @@ public class VentanaInicialController {
         try {
             Scene scene = new Scene(fxmlLoader.load(), 750, 500);
             stage.setTitle("Nombre");
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void onCreditosButtonClick(ActionEvent actionEvent) {
+        Stage stage = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader(VistaPrincipal.class.getResource("creditos.fxml"));
+        try {
+            Scene scene = new Scene(fxmlLoader.load(), 750, 500);
+            stage.setTitle("Creditos");
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {
