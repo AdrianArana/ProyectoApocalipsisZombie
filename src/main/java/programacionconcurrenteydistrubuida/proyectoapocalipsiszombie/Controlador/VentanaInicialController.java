@@ -1,4 +1,4 @@
-package programacionconcurrenteydistrubuida.proyectoapocalipsiszombie;
+package programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Controlador;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.VistaPrincipal;
 
 public class VentanaInicialController {
     public Button iniciarPartidaButton;

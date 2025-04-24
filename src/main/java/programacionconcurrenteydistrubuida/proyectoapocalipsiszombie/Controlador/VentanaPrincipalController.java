@@ -1,4 +1,4 @@
-package programacionconcurrenteydistrubuida.proyectoapocalipsiszombie;
+package programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Controlador;
 
 import javafx.stage.Stage;
 
