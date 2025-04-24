@@ -33,4 +33,10 @@ public class VentanaInicialController {
         }
 
     }
+
+    public void loadUserData(String nombreGuardadoString) {
+    }
+
+    public void setStage(Stage stage) {
+    }
 }
