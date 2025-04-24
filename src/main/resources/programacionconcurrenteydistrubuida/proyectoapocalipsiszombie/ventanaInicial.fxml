@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.VentanaInicialController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Controlador.VentanaInicialController">
    <children>
       <Button fx:id="iniciarPartidaButton" layoutX="274.0" layoutY="187.0" mnemonicParsing="false" onAction="#iniciarPartidaButtonClick" text="Iniciar Partida" />
       <Button fx:id="CreditosButton" layoutX="51.0" layoutY="298.0" mnemonicParsing="false" onAction="#onCreditosButtonClick" text="Creditos" />
