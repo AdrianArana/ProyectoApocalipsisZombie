@@ -13,7 +13,7 @@ public class VistaPrincipal extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(VistaPrincipal.class.getResource("ventanaInicial.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Ventana Inicial!");
+        stage.setTitle("Ventana Inicial");
         stage.setScene(scene);
         stage.show();
     }
