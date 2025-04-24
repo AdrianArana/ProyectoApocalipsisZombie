@@ -4,6 +4,11 @@ public class Humano extends Thread {
     private String id; //H____
     Mapa mapa;
     private boolean marcado;
+
+    public Humano(Mapa mapa) {
+        this.mapa = mapa;
+    }
+
     @Override
     public void run() {
 

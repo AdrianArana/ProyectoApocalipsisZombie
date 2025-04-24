@@ -1,7 +1,13 @@
 package programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo;
 
 public class Zombie extends Thread {
+    private Mapa mapa;
     private String id; //Z____
+
+    public Zombie(String z0000, Mapa mapa) {
+        this.id = z0000;
+        this.mapa = mapa;
+    }
 
     @Override
     public void run() {
