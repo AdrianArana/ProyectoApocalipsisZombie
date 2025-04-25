@@ -6,11 +6,15 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class ZonaRiesgo {
-    ArrayList<Thread>[] zonas = new ArrayList[4];
+    ArrayList<Thread>[] zonas;
 
-    ArrayList<Thread> zona1;
-    ArrayList<Thread> zona2;
-    ArrayList<Thread> zona3;
-    ArrayList<Thread> zona4;
+    public void ZonaRiesgo() {
+        ArrayList<Thread>[] zonas = new ArrayList[4];
+        zonas[0] = new ArrayList<Thread>();
+        zonas[1] = new ArrayList<Thread>();
+        zonas[2] = new ArrayList<Thread>();
+        zonas[3] = new ArrayList<Thread>();
+
+    }
 
 }
