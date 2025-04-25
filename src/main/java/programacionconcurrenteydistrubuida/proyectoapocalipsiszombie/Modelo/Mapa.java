@@ -34,17 +34,13 @@ public class Mapa {
     Lock lockZonaComun = new ReentrantLock();
 
     Condition esperarComida = lockZonaComedor.newCondition();
-    private ArrayList<Humano> humanos_zona1 = new ArrayList<>();
-    private ArrayList<Humano> humanos_zona2 = new ArrayList<>();
-    private ArrayList<Humano> humanos_zona3 = new ArrayList<>();
-    private ArrayList<Humano> humanos_zona4 = new ArrayList<>();
 
 
     //FUNCIONES:
     /*
         Funciones del humano:
             void entrarTunel(int tunelElegido, Humano humano, boolean preferencia?)// hay preferencia al volver
-                void salirTunel(lo mismo)
+            void salirTunel(lo mismo)
             void entrarZonaRiesgo(int tunelTomado, Humano humano)
             void salirZonaRiesgo(lo mismo)
             void entrarZonaDescanso(Humano humano) // cuenta con estar un tiempo dentro [2-4s]
@@ -72,6 +68,7 @@ public class Mapa {
         cb_tuneles[tunelElegido - 1].await();
         sem_Tuneles[tunelElegido - 1].acquire();
         zonaRefugio.zonaComun.remove(humano);
+        zonaTuneles.tuneles[tunelElegido-1].add(humano);
         // Pasan de 1 en 1, porque el semaforo es fair
         sleep(1000); // Pasan de lado a lado
         sem_Tuneles[tunelElegido - 1].release();

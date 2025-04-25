@@ -18,8 +18,6 @@ public class Humano extends Thread {
 
     @Override
     public void run() {
-
-
         while (true) {
             //Generados en la zona comun
             try {
