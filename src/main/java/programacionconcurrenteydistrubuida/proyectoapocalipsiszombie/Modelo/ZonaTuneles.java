@@ -4,16 +4,14 @@ import java.util.ArrayList;
 
 
 public class ZonaTuneles {
-    ArrayList<Thread>[] tuneles;
-    private ArrayList<Thread> tunel1 = new ArrayList<Thread>();
-    private ArrayList<Thread> tunel2 = new ArrayList<Thread>();
-    private ArrayList<Thread> tunel3 = new ArrayList<Thread>();
-    private ArrayList<Thread> tunel4 = new ArrayList<Thread>();
+    ArrayList<Humano>[] tuneles;
+
     public ZonaTuneles(){
-        tuneles[0] = tunel1;
-        tuneles[0] = tunel2;
-        tuneles[0] = tunel3;
-        tuneles[0] = tunel4;
+        ArrayList<Humano>[] tuneles = new ArrayList[4];
+        tuneles[0]=new ArrayList<Humano>();
+        tuneles[1]=new ArrayList<Humano>();
+        tuneles[2]=new ArrayList<Humano>();
+        tuneles[3]=new ArrayList<Humano>();
 
     }
 }

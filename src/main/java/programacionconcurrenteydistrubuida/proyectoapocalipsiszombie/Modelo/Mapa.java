@@ -33,6 +33,15 @@ public class Mapa {
     Lock lockZonaComedor = new ReentrantLock();
     Lock lockZonaComun = new ReentrantLock();
 
+
+    Lock[] locks_tuneles = new Lock[]{new ReentrantLock(), new ReentrantLock(), new ReentrantLock(), new ReentrantLock()};
+
+    boolean[] tuneles_ocupados = new boolean[]{false, false, false, false};
+
+
+    Lock volverLock = new ReentrantLock();
+    Condition esperaDeVuelta = volverLock.newCondition();
+    private boolean quierenVolver = false;
     Condition esperarComida = lockZonaComedor.newCondition();
 
 
@@ -68,20 +77,37 @@ public class Mapa {
         cb_tuneles[tunelElegido - 1].await();
         sem_Tuneles[tunelElegido - 1].acquire();
         zonaRefugio.zonaComun.remove(humano);
-        zonaTuneles.tuneles[tunelElegido-1].add(humano);
+        zonaTuneles.tuneles[tunelElegido - 1].add(humano);
         // Pasan de 1 en 1, porque el semaforo es fair
+
+        locks_tuneles[tunelElegido - 1].lock();
+        tuneles_ocupados[tunelElegido - 1] = true;
+        locks_tuneles[tunelElegido - 1].unlock();
+
         sleep(1000); // Pasan de lado a lado
+        zonaTuneles.tuneles[tunelElegido - 1].remove(humano);
+        while (quierenVolver) {
+            esperaDeVuelta.notify();//Monitor
+
+        }
         sem_Tuneles[tunelElegido - 1].release();
         //Humano "id" ha pasado a la zona: "tunelElegido"
     }
 
-    public void pasarTunelVuelta(int tunelElegido, Humano humano) {
-        /*lockTuneles.lock();
-        pasandoDeVuelta = true;
-        sem_Tuneles[tunelElegido-1].acquire();
-        sleep(1000);
-        pasandoDeVuelta = false;
-        sem_Tuneles[tunelElegido-1].release();*/
+    public void pasarTunelVuelta(int tunelElegido, Humano humano) throws InterruptedException {
+
+        quierenVolver = true;
+        while (tuneles_ocupados[tunelElegido - 1]) {
+
+            esperaDeVuelta.await();
+            sleep(1000);
+            quierenVolver = false;
+
+
+            sem_Tuneles[tunelElegido - 1].acquire();
+            sleep(1000);
+            sem_Tuneles[tunelElegido - 1].release();
+        }
     }
 
     public void entrarZonaDescanso(Humano humano) {
@@ -97,6 +123,7 @@ public class Mapa {
         lockZonaDescanso.unlock();
 
     }
+
 
     public void salirZonaDescanso(Humano humano) {
         lockZonaDescanso.lock();
@@ -137,10 +164,11 @@ public class Mapa {
         zonaRefugio.addComida(humano.getComida());
     }
 
-    public void entrarZonaComun(Humano humano){
+    public void entrarZonaComun(Humano humano) {
         lockZonaComun.lock();
         zonaRefugio.zonaComun.add(humano);
         lockZonaComun.unlock();
     }
 
 }
+
