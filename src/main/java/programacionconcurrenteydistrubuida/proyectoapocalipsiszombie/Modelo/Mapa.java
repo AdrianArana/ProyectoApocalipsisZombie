@@ -1,6 +1,7 @@
 package programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Semaphore;
@@ -14,6 +15,7 @@ public class Mapa {
     ZonaRefugio zonaRefugio;
     ZonaRiesgo zonaRiesgo;
     ZonaTuneles zonaTuneles;
+    Random random=new Random();
 
     CyclicBarrier[] cb_tuneles = {
             new CyclicBarrier(3),
@@ -65,7 +67,7 @@ public class Mapa {
             void salirZonaComedor(Humano humano)
             void entrarZonaComun(Humano humano) // y ya se pone a hacer cola para volver a salir
         Funciones del zombie
-            void cambiarDeZona(int zonaInicial, int zonaDestino) // cambiar al zombie de una lista a otra
+            void cambiarDeZona(int zonaInicial, Zombie zombie) // cambiar al zombie de una lista a otra
             void atacar(
                 if (hay humanos) {
                 (for individuo in zonas[mizona]) la recorre
@@ -80,6 +82,13 @@ public class Mapa {
                 else {salir de la funcion}
 
      */
+
+
+
+
+
+    //FUNCIONES PARA HUMANO
+
     public void pasarTunelIda(int tunelElegido, Humano humano) throws BrokenBarrierException, InterruptedException {
         cb_tuneles[tunelElegido - 1].await();
         sem_Tuneles[tunelElegido - 1].acquire();
@@ -173,6 +182,17 @@ public class Mapa {
         lockZonaComun.lock();
         zonaRefugio.zonaComun.add(humano);
         lockZonaComun.unlock();
+    }
+
+
+
+
+
+    /// FUNCIONES PARA ZOMBIE
+    public synchronized void cambiarDeZona(int zonaInicial, Zombie zombie){
+        zonaRiesgo.zonas[zonaInicial-1].remove(zombie);
+        int nueva_zona=random.nextInt(4);
+        zonaRiesgo.zonas[nueva_zona].add(zombie);
     }
 
 }
