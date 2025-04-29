@@ -15,8 +15,9 @@ public class Mapa {
     ZonaRefugio zonaRefugio;
     ZonaRiesgo zonaRiesgo;
     ZonaTuneles zonaTuneles;
-    Random random=new Random();
-
+    Random random = new Random();
+    //private int kills = 0;
+    private int quierenVolver = 0;
     CyclicBarrier[] cb_tuneles = {
             new CyclicBarrier(3),
             new CyclicBarrier(3),
@@ -30,112 +31,86 @@ public class Mapa {
             new Semaphore(1, true)
     };
 
-    Semaphore[] sem_TunelesVuelta = {
-            new Semaphore(1, true),
-            new Semaphore(1, true),
-            new Semaphore(1, true),
-            new Semaphore(1, true)
-    };
     Lock lockZonaRiesgo = new ReentrantLock();
     Lock lockZonaDescanso = new ReentrantLock();
     Lock lockZonaComedor = new ReentrantLock();
     Lock lockZonaComun = new ReentrantLock();
 
 
-
     Lock[] locks_tuneles = new Lock[]{new ReentrantLock(), new ReentrantLock(), new ReentrantLock(), new ReentrantLock()};
+    Condition[] espera_vuelta = new Condition[]{locks_tuneles[0].newCondition(), locks_tuneles[1].newCondition(), locks_tuneles[2].newCondition(), locks_tuneles[3].newCondition()};
+    //Para que esperen los individuos a que pasen los que vueven al salir a la zona de riesgo
+    Condition[] espera_salida = new Condition[]{locks_tuneles[0].newCondition(), locks_tuneles[1].newCondition(), locks_tuneles[2].newCondition(), locks_tuneles[3].newCondition()};
 
     boolean[] tuneles_ocupados = new boolean[]{false, false, false, false};
 
-
-    Lock volverLock = new ReentrantLock();
-    Condition esperaDeVuelta = volverLock.newCondition();
-    private boolean quierenVolver = false;
     Condition esperarComida = lockZonaComedor.newCondition();
 
-
     //FUNCIONES:
-    /*
-        Funciones del humano:
-            void entrarTunel(int tunelElegido, Humano humano, boolean preferencia?)// hay preferencia al volver
-            void salirTunel(lo mismo)
-            void entrarZonaRiesgo(int tunelTomado, Humano humano)
-            void salirZonaRiesgo(lo mismo)
-            void entrarZonaDescanso(Humano humano) // cuenta con estar un tiempo dentro [2-4s]
-            void salirZonaDescanso(Humano humano)
-            void entrarZonaComedor(Humano humano) //Dentro de esta comer yestar un tiempo [3-5s]
-            void salirZonaComedor(Humano humano)
-            void entrarZonaComun(Humano humano) // y ya se pone a hacer cola para volver a salir
-        Funciones del zombie
-            void cambiarDeZona(int zonaInicial, Zombie zombie) // cambiar al zombie de una lista a otra
-            void atacar(
-                if (hay humanos) {
-                (for individuo in zonas[mizona]) la recorre
-                    elegir uno al azar
-                    le ataca
-                        if (gana) {
-                            le matamos (humano.interrupt (matarle) y metemos un zombie nuevo con su id)
-                        } else{
-                            le marcamos (humano.setMarcado(true) y humano.quitarComida())
-                        }
-                    }
-                else {salir de la funcion}
-
-     */
-
-
-
 
 
     //FUNCIONES PARA HUMANO
 
     public void pasarTunelIda(int tunelElegido, Humano humano) throws BrokenBarrierException, InterruptedException {
-        cb_tuneles[tunelElegido - 1].await();
-        sem_Tuneles[tunelElegido - 1].acquire();
-        zonaRefugio.zonaComun.remove(humano);
-        zonaTuneles.tuneles[tunelElegido - 1].add(humano);
-        // Pasan de 1 en 1, porque el semaforo es fair
+        cb_tuneles[tunelElegido].await();
+        sem_Tuneles[tunelElegido].acquire();
+        locks_tuneles[tunelElegido].lock();
 
-        locks_tuneles[tunelElegido - 1].lock();
-        tuneles_ocupados[tunelElegido - 1] = true;
-        locks_tuneles[tunelElegido - 1].unlock();
+        zonaRefugio.zonaComun.remove(humano);
+        zonaTuneles.tuneles[tunelElegido].add(humano);
+        tuneles_ocupados[tunelElegido] = true;
+        locks_tuneles[tunelElegido].unlock();//Lo soltamos mientras pasa para que puedan esperar los de fuera o los de dentro
 
         sleep(1000); // Pasan de lado a lado
-        zonaTuneles.tuneles[tunelElegido - 1].remove(humano);
-        while (quierenVolver) {
-            esperaDeVuelta.notify();//Monitor
+        locks_tuneles[tunelElegido].lock();
+
+        zonaTuneles.tuneles[tunelElegido].remove(humano);
+        tuneles_ocupados[tunelElegido] = false;
+
+        while (quierenVolver > 0) {
+            espera_vuelta[tunelElegido].signal();//Monitor
+            espera_salida[tunelElegido].await();
             //Espera a que vuelva el que queria volver antes de dejar a otro entrar con el sem_tuneles.release();
+
         }
-        sem_Tuneles[tunelElegido - 1].release(); // Antes del release, dejamos pasar a los que quieran volver
+        locks_tuneles[tunelElegido].unlock();
+        sem_Tuneles[tunelElegido].release(); // Antes del release, dejamos pasar a los que quieran volver
         //Humano "id" ha pasado a la zona: "tunelElegido"
     }
 
-    public synchronized void pasarTunelVuelta(int tunelElegido, Humano humano) throws InterruptedException {
+    public void pasarTunelVuelta(int tunelElegido, Humano humano) throws InterruptedException {
+        quierenVolver++; // Ponemos a true
+        locks_tuneles[tunelElegido].lock();
+        while (tuneles_ocupados[tunelElegido]) {
+            espera_vuelta[tunelElegido].await();
+            //Esperamos a que el tunel se libere
 
-        quierenVolver = true; // Ponemos a true
-        while (tuneles_ocupados[tunelElegido - 1]) {
-
-            esperaDeVuelta.await();
-            sleep(1000);
-            quierenVolver = false;
-            sem_TunelesVuelta[tunelElegido - 1].acquire();
-            sleep(1000);
-            sem_TunelesVuelta[tunelElegido - 1].release();
         }
+        zonaTuneles.tuneles[tunelElegido].add(humano);
+        locks_tuneles[tunelElegido].unlock();
+
+        sleep(1000);                                ///Pasa por el tunel
+        locks_tuneles[tunelElegido].lock();
+
+        zonaTuneles.tuneles[tunelElegido].remove(humano);
+        espera_salida[tunelElegido].signal();
+        quierenVolver--;
+        locks_tuneles[tunelElegido].unlock();
     }
 
     public void entrarZonaDescanso(Humano humano) {
         lockZonaDescanso.lock();
         zonaRefugio.zonaDescanso.add(humano);
+        lockZonaDescanso.unlock();
         if (humano.getComida() > 0) {
             zonaRefugio.addComida(humano.getComida());
             humano.setComida(0);
+            lockZonaComedor.lock();
             esperarComida.signal();
             //Avisamos a 2 humanos porque siempre se trae 2 de comida y cada uno come solo 1.
             esperarComida.signal();
+            lockZonaComedor.unlock();
         }
-        lockZonaDescanso.unlock();
-
     }
 
 
@@ -148,14 +123,14 @@ public class Mapa {
 
     public void entrarZonaRiesgo(int tunelTomado, Humano humano) throws InterruptedException {
         lockZonaRiesgo.lock();
-        zonaRiesgo.zonas[tunelTomado - 1].add(humano);
+        zonaRiesgo.zonas[tunelTomado].add(humano);
         humano.setComida(2);
         lockZonaRiesgo.unlock();
     }
 
     public void salirZonaRiesgo(int tunelTomado, Humano humano) throws InterruptedException {
         lockZonaRiesgo.lock();
-        zonaRiesgo.zonas[tunelTomado - 1].remove(humano);
+        zonaRiesgo.zonas[tunelTomado].remove(humano);
         lockZonaRiesgo.unlock();
     }
 
@@ -185,15 +160,72 @@ public class Mapa {
     }
 
 
-
-
-
     /// FUNCIONES PARA ZOMBIE
-    public synchronized void cambiarDeZona(int zonaInicial, Zombie zombie){
-        zonaRiesgo.zonas[zonaInicial-1].remove(zombie);
-        int nueva_zona=random.nextInt(4);
+    public int cambiarDeZona(int zonaInicial, Zombie zombie) {
+        lockZonaRiesgo.lock();
+        zonaRiesgo.zonas[zonaInicial].remove(zombie);
+        int nueva_zona = random.nextInt(4);
         zonaRiesgo.zonas[nueva_zona].add(zombie);
+        lockZonaRiesgo.unlock();
+        return nueva_zona;
     }
 
+    public void atacar(Zombie zombie, int zonaZombie) throws InterruptedException {
+        boolean dejarDeAtacar = false;
+        Humano humanoAtacado = null;
+
+        synchronized (this) {
+            ArrayList<Humano> posiblesAtaques = new ArrayList<Humano>();
+            for (Thread individuo : zonaRiesgo.zonas[zonaZombie]) {
+                if (individuo.getClass() == Humano.class) {
+                    posiblesAtaques.add((Humano) individuo); // Los metemos si es humano
+                }
+            }
+            if (!posiblesAtaques.isEmpty()) {//Solo atacamos si hay humanos
+                boolean encontrado = false;
+                while (!encontrado) {//Buscamos humano para atacar mientras haya en la zona de riesgo.
+                    humanoAtacado = posiblesAtaques.get(random.nextInt(posiblesAtaques.size()));
+                    if (!humanoAtacado.getSiendoAtacado()) {//Si no esta siendo atacado, empezamos a atacarle
+                        humanoAtacado.setSiendoAtacado();
+                        encontrado = true;
+                    } else { // Volvemos a buscar
+                        posiblesAtaques = new ArrayList<Humano>();
+                        for (Thread individuo : zonaRiesgo.zonas[zonaZombie]) {
+                            if (individuo.getClass() == Humano.class) {
+                                posiblesAtaques.add((Humano) individuo); // Los metemos si es humano
+                            }
+                        }
+                        if (posiblesAtaques.isEmpty()) {
+                            dejarDeAtacar = true;
+                            encontrado = true;
+                        }
+                    }
+                }
+            }
+        }
+        if (!dejarDeAtacar) {//Por si no hay ya para atacar
+            if (humanoAtacado != null) {//Si hemos encontrado humano para atacar, le atacamos
+                boolean gana = (((int) (Math.random() * 3)) == 0);
+                if (gana) {
+                    humanoAtacado.interrupt();// Matamos al humano
+                    Thread.sleep(random.nextInt(1000) + 500);//Tarda un tiempo de 1 a 1,5 segundos en atacarlo, (antes de eliminarlo)
+                    zombie.sumarKills();
+                    zonaRiesgo.zonas[zonaZombie].remove(humanoAtacado);
+                    String idZombieNuevo = ("Z" + humanoAtacado.getIde().substring(1, 4));
+
+                    Zombie zombieNuevo = new Zombie(idZombieNuevo, this, zonaZombie);
+
+                    zombieNuevo.start();
+                } else {
+                    int milisAtaque = random.nextInt(1000) + 500;//Representa el tiempo que luchan humano contra zombie
+                    humanoAtacado.sleep(milisAtaque);
+                    humanoAtacado.marcarHumano();
+                    humanoAtacado.setComida(0);//Pierde la comida al defenderse
+                    sleep(milisAtaque);
+                    pasarTunelVuelta(zonaZombie, humanoAtacado); //Humano vuelve inmediatamente si han intentado atacarle
+                }
+            }
+        }
+    }
 }
 

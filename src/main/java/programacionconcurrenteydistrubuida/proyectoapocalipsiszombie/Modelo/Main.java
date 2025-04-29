@@ -9,7 +9,7 @@ public class Main {
             Humano humano = new Humano(mapa,id);
             humano.start();
         }
-        Zombie zombie = new Zombie(("Z0000"),mapa);
+        Zombie zombie = new Zombie(("Z0000"),mapa,0);
         zombie.start();
     }
     public static void main(String[] args) {
