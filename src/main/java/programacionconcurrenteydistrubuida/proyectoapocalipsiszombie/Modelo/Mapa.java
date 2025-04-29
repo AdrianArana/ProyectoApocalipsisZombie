@@ -28,10 +28,17 @@ public class Mapa {
             new Semaphore(1, true)
     };
 
+    Semaphore[] sem_TunelesVuelta = {
+            new Semaphore(1, true),
+            new Semaphore(1, true),
+            new Semaphore(1, true),
+            new Semaphore(1, true)
+    };
     Lock lockZonaRiesgo = new ReentrantLock();
     Lock lockZonaDescanso = new ReentrantLock();
     Lock lockZonaComedor = new ReentrantLock();
     Lock lockZonaComun = new ReentrantLock();
+
 
 
     Lock[] locks_tuneles = new Lock[]{new ReentrantLock(), new ReentrantLock(), new ReentrantLock(), new ReentrantLock()};
@@ -88,25 +95,23 @@ public class Mapa {
         zonaTuneles.tuneles[tunelElegido - 1].remove(humano);
         while (quierenVolver) {
             esperaDeVuelta.notify();//Monitor
-
+            //Espera a que vuelva el que queria volver antes de dejar a otro entrar con el sem_tuneles.release();
         }
-        sem_Tuneles[tunelElegido - 1].release();
+        sem_Tuneles[tunelElegido - 1].release(); // Antes del release, dejamos pasar a los que quieran volver
         //Humano "id" ha pasado a la zona: "tunelElegido"
     }
 
-    public void pasarTunelVuelta(int tunelElegido, Humano humano) throws InterruptedException {
+    public synchronized void pasarTunelVuelta(int tunelElegido, Humano humano) throws InterruptedException {
 
-        quierenVolver = true;
+        quierenVolver = true; // Ponemos a true
         while (tuneles_ocupados[tunelElegido - 1]) {
 
             esperaDeVuelta.await();
             sleep(1000);
             quierenVolver = false;
-
-
-            sem_Tuneles[tunelElegido - 1].acquire();
+            sem_TunelesVuelta[tunelElegido - 1].acquire();
             sleep(1000);
-            sem_Tuneles[tunelElegido - 1].release();
+            sem_TunelesVuelta[tunelElegido - 1].release();
         }
     }
 
