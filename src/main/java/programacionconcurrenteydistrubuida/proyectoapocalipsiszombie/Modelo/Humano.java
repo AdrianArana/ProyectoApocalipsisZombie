@@ -34,6 +34,8 @@ public class Humano extends Thread {
                 sleep(3000 + (int) (Math.random() * 2000));//Tiempo en la zona de riesgo
 
                 if (marcado){
+                    mapa.salirZonaRiesgo(tunelElegido, this);
+
                     marcado = false;
                     mapa.entrarZonaDescanso(this);
                     sleep(random.nextInt(2000) + 2000);//Descansa 2-4 segundos
