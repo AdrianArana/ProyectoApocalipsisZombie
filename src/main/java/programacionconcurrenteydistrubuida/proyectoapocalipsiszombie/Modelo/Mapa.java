@@ -15,6 +15,14 @@ public class Mapa {
     ZonaRefugio zonaRefugio;
     ZonaRiesgo zonaRiesgo;
     ZonaTuneles zonaTuneles;
+
+    public Mapa(ZonaRefugio zonaRefugio, ZonaRiesgo zonaRiesgo, ZonaTuneles zonaTuneles) {
+        this.zonaRefugio = zonaRefugio;
+        this.zonaRiesgo = zonaRiesgo;
+        this.zonaTuneles = zonaTuneles;
+    }
+
+
     Random random = new Random();
     //private int kills = 0;
     private int quierenVolver = 0;
@@ -35,9 +43,9 @@ public class Mapa {
     Lock lockZonaDescanso = new ReentrantLock();
     Lock lockZonaComedor = new ReentrantLock();
     Lock lockZonaComun = new ReentrantLock();
-
-
     Lock[] locks_tuneles = new Lock[]{new ReentrantLock(), new ReentrantLock(), new ReentrantLock(), new ReentrantLock()};
+
+
     Condition[] espera_vuelta = new Condition[]{locks_tuneles[0].newCondition(), locks_tuneles[1].newCondition(), locks_tuneles[2].newCondition(), locks_tuneles[3].newCondition()};
     //Para que esperen los individuos a que pasen los que vueven al salir a la zona de riesgo
     Condition[] espera_salida = new Condition[]{locks_tuneles[0].newCondition(), locks_tuneles[1].newCondition(), locks_tuneles[2].newCondition(), locks_tuneles[3].newCondition()};

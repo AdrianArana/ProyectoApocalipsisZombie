@@ -23,6 +23,7 @@ public class Humano extends Thread {
 
     @Override
     public void run() {
+        mapa.zonaRefugio.zonaComun.add(this);
         while (true) {
             //Generados en la zona comun
             try {

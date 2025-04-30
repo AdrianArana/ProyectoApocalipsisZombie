@@ -14,9 +14,6 @@ public class Zombie extends Thread {
         kills++;
     }
 
-    public void setKills(int kills) {
-        this.kills = kills;
-    }
 
     public Zombie(String z0000, Mapa mapa, int zonaInicial) {
         this.id = z0000;

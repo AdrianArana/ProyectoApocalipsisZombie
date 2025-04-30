@@ -8,21 +8,23 @@ public class ZonaRefugio {
     ArrayList<Thread> zonaComedor;
     ArrayList<Thread> zonaComun;
 
-    private int amacen_comida;
-
-    public synchronized int getAlmacen_comida() {
-        return amacen_comida;
+    public ZonaRefugio() {
+        this.zonaDescanso= new ArrayList<Thread>();
+        this.zonaComedor=new ArrayList<Thread>();
+        this.zonaComun=new ArrayList<Thread>();
     }
 
-    public void setAmacen_comida(int amacen_comida) {
-        this.amacen_comida = amacen_comida;
+    private int almacen_comida=0;
+
+    public synchronized int getAlmacen_comida() {
+        return almacen_comida;
     }
 
     public synchronized void addComida(int almacen_comida) {
-        this.amacen_comida += almacen_comida;
+        this.almacen_comida += almacen_comida;
     }
 
     public synchronized void takeComida(int almacen_comida) {
-        this.amacen_comida -= almacen_comida;
+        this.almacen_comida -= almacen_comida;
     }
 }

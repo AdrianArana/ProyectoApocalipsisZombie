@@ -8,7 +8,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class ZonaRiesgo {
     ArrayList<Thread>[] zonas;
     public ZonaRiesgo() {
-        ArrayList<Thread>[] zonas = new ArrayList[4];
+        this.zonas = new ArrayList[4];
         zonas[0] = new ArrayList<Thread>();
         zonas[1] = new ArrayList<Thread>();
         zonas[2] = new ArrayList<Thread>();
