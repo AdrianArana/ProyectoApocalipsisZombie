@@ -122,7 +122,7 @@ public class PantallaJuegoController {
         new Thread(() -> {
             while (true) {
                 try {
-                    Thread.sleep(10 00); // Intervalo de 1 segundo entre ejecuciones
+                    Thread.sleep(1000); // Intervalo de 1 segundo entre ejecuciones
                     recorrerZonaRefugio();
                     recorrerZonaRiesgo();
                     recorrerZonaTuneles();
