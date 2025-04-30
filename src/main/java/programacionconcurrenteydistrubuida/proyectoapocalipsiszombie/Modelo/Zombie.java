@@ -45,7 +45,7 @@ public class Zombie extends Thread {
 
                 verificarPausa();
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                System.out.println("HAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             }
         }
     }

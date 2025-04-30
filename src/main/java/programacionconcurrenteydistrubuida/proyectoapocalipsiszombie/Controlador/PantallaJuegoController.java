@@ -50,20 +50,18 @@ public class PantallaJuegoController {
         this.mapa = mapa;
     }
 
-
-    public synchronized void pausarJuego() {
-
+    public synchronized void pausarJuego(){}
+    /*public synchronized void pausarJuego() {
         // Suspendemos todos los hilos de los humanos
         for (Humano humano : lista_humanos) {
             humano.suspender();
         }
-
         // Suspendemos todos los hilos de los zombis
         for (Zombie zombie : lista_zombis) {
             zombie.suspender();
         }
     }
-
+*/
     public void onBotonPausar(ActionEvent mouseEvent) {
         botonReanudar.setDisable(false);
         botonPausar.setDisable(true);
@@ -72,12 +70,10 @@ public class PantallaJuegoController {
 
 
     public synchronized void reanudarJuego() {
-
         // Reanudamos todos los hilos de los humanos
         for (Humano humano : lista_humanos) {
-            humano.reanudar();
+            //humano.reanudar();
         }
-
         // Reanudamos todos los hilos de los zombis
         for (Zombie zombie : lista_zombis) {
             zombie.reanudar();
@@ -88,9 +84,10 @@ public class PantallaJuegoController {
         botonReanudar.setDisable(true);
         botonPausar.setDisable(false);
         if (!empezado) {
+            empezado = true;
             Zombie z = new Zombie("Z0000", mapa, 0);
             z.start();
-            for (int i = 1; i < 2; i++) {
+            for (int i = 1; i < 10000; i++) {
                 Humano h = new Humano(mapa, String.format("H%04d", i));
                 h.start();
             }
@@ -122,15 +119,10 @@ public class PantallaJuegoController {
     }
 
     private void recorrerTodo() {
-        System.out.println("defaijdosicdosnjnvdsovdnsoivds");
-        recorrerZonaRefugio();
-        recorrerZonaRiesgo();
-        recorrerZonaTuneles();
         new Thread(() -> {
             while (true) {
                 try {
-                    Thread.sleep(200); // Intervalo de 1 segundo entre ejecuciones
-                    System.out.println("recorriendo");
+                    Thread.sleep(10 00); // Intervalo de 1 segundo entre ejecuciones
                     recorrerZonaRefugio();
                     recorrerZonaRiesgo();
                     recorrerZonaTuneles();

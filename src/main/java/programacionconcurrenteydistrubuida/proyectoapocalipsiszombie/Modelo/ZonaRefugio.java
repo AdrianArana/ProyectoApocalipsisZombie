@@ -48,7 +48,7 @@ public class ZonaRefugio {
         this.almacen_comida += almacen_comida;
     }
 
-    public synchronized void takeComida(int almacen_comida) {
-        this.almacen_comida -= almacen_comida;
+    public synchronized void takeComida() {
+        this.almacen_comida --;
     }
 }
