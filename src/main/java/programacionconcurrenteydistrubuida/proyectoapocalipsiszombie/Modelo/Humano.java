@@ -14,13 +14,17 @@ public class Humano extends Thread {
     private final Object lock = new Object(); // Objeto para controlar la sincronización
 
 
-
+    private boolean seguir = true;
     public Humano(Mapa mapa, String id) {
         this.mapa = mapa;
         this.id = id;
         this.comida = 0;
     }
 
+    public void morir(){
+        this.seguir = false;
+        interrupt();
+    }
     public String getIde() {
         return id;
     }
@@ -28,7 +32,7 @@ public class Humano extends Thread {
     @Override
     public void run() {
         mapa.zonaRefugio.zonaComun.add(this);
-        while (true) {
+        while (seguir) {
             //Generados en la zona comun
             try {
                 int tunelElegido = (int) (Math.random() * 4);
@@ -43,6 +47,7 @@ public class Humano extends Thread {
                 if (marcado){
                     mapa.salirZonaRiesgo(tunelElegido, this);
                     marcado = false;
+
                     mapa.entrarZonaDescanso(this);
                     sleep(random.nextInt(2000) + 2000);//Descansa 2-4 segundos
                     verificarPausa();  // Verificar si se debe pausar

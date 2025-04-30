@@ -6,8 +6,12 @@ import java.util.ArrayList;
 public class ZonaTuneles {
     ArrayList<Humano>[] tuneles;
 
+    public ArrayList<Humano>[] getTuneles() {
+        return tuneles;
+    }
+
     public ZonaTuneles(){
-        ArrayList<Humano>[] tuneles = new ArrayList[4];
+        tuneles = new ArrayList[4];
         tuneles[0]=new ArrayList<Humano>();
         tuneles[1]=new ArrayList<Humano>();
         tuneles[2]=new ArrayList<Humano>();

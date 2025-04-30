@@ -5,6 +5,11 @@ import java.util.Random;
 public class Zombie extends Thread {
     private final int zonaInicial;
     private Mapa mapa;
+
+    public String getIde() {
+        return id;
+    }
+
     private String id; //Z____
     Random random=new Random();
     private int kills=0;

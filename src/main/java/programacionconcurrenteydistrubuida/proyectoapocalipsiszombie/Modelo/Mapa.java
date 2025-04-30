@@ -22,15 +22,38 @@ public class Mapa {
         this.zonaTuneles = new ZonaTuneles();
     }
 
+    public ZonaRefugio getZonaRefugio() {
+        return zonaRefugio;
+    }
+
+    public void setZonaRefugio(ZonaRefugio zonaRefugio) {
+        this.zonaRefugio = zonaRefugio;
+    }
+
+    public ZonaRiesgo getZonaRiesgo() {
+        return zonaRiesgo;
+    }
+
+    public void setZonaRiesgo(ZonaRiesgo zonaRiesgo) {
+        this.zonaRiesgo = zonaRiesgo;
+    }
+
+    public ZonaTuneles getZonaTuneles() {
+        return zonaTuneles;
+    }
+
+    public void setZonaTuneles(ZonaTuneles zonaTuneles) {
+        this.zonaTuneles = zonaTuneles;
+    }
 
     Random random = new Random();
     //private int kills = 0;
-    private int quierenVolver = 0;
+    private int[] quierenVolver = new int[4];
     CyclicBarrier[] cb_tuneles = {
-            new CyclicBarrier(3),
-            new CyclicBarrier(3),
-            new CyclicBarrier(3),
-            new CyclicBarrier(3)
+            new CyclicBarrier(1),
+            new CyclicBarrier(1),
+            new CyclicBarrier(1),
+            new CyclicBarrier(1)
     };
     Semaphore[] sem_Tuneles = {
             new Semaphore(1, true),
@@ -66,6 +89,7 @@ public class Mapa {
 
         zonaRefugio.zonaComun.remove(humano);
         zonaTuneles.tuneles[tunelElegido].add(humano);
+
         tuneles_ocupados[tunelElegido] = true;
         locks_tuneles[tunelElegido].unlock();//Lo soltamos mientras pasa para que puedan esperar los de fuera o los de dentro
 
@@ -73,9 +97,11 @@ public class Mapa {
         locks_tuneles[tunelElegido].lock();
 
         zonaTuneles.tuneles[tunelElegido].remove(humano);
+        zonaRiesgo.zonas[tunelElegido].add(humano);
+
         tuneles_ocupados[tunelElegido] = false;
 
-        while (quierenVolver > 0) {
+        while (quierenVolver[tunelElegido] > 0) {
             espera_vuelta[tunelElegido].signal();//Monitor
             espera_salida[tunelElegido].await();
             //Espera a que vuelva el que queria volver antes de dejar a otro entrar con el sem_tuneles.release();
@@ -87,8 +113,8 @@ public class Mapa {
     }
 
     public void pasarTunelVuelta(int tunelElegido, Humano humano) throws InterruptedException {
-        quierenVolver++; // Ponemos a true
         locks_tuneles[tunelElegido].lock();
+        quierenVolver[tunelElegido]++;
         while (tuneles_ocupados[tunelElegido]) {
             espera_vuelta[tunelElegido].await();
             //Esperamos a que el tunel se libere
@@ -102,7 +128,7 @@ public class Mapa {
 
         zonaTuneles.tuneles[tunelElegido].remove(humano);
         espera_salida[tunelElegido].signal();
-        quierenVolver--;
+        quierenVolver[tunelElegido]--;
         locks_tuneles[tunelElegido].unlock();
     }
 
@@ -215,11 +241,11 @@ public class Mapa {
             if (humanoAtacado != null) {//Si hemos encontrado humano para atacar, le atacamos
                 boolean gana = (((int) (Math.random() * 3)) == 0);
                 if (gana) {
-                    humanoAtacado.interrupt();// Matamos al humano
+                    humanoAtacado.morir();// Matamos al humano
                     Thread.sleep(random.nextInt(1000) + 500);//Tarda un tiempo de 1 a 1,5 segundos en atacarlo, (antes de eliminarlo)
                     zombie.sumarKills();
                     zonaRiesgo.zonas[zonaZombie].remove(humanoAtacado);
-                    String idZombieNuevo = ("Z" + humanoAtacado.getIde().substring(1, 4));
+                    String idZombieNuevo = ("Z" + humanoAtacado.getIde().substring(1, 5));
 
                     Zombie zombieNuevo = new Zombie(idZombieNuevo, this, zonaZombie);
 

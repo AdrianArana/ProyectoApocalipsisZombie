@@ -4,14 +4,38 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class ZonaRefugio {
-    ArrayList<Thread> zonaDescanso;
-    ArrayList<Thread> zonaComedor;
-    ArrayList<Thread> zonaComun;
+    ArrayList<Humano> zonaDescanso;
+    ArrayList<Humano> zonaComedor;
+    ArrayList<Humano> zonaComun;
 
     public ZonaRefugio() {
-        this.zonaDescanso= new ArrayList<Thread>();
-        this.zonaComedor=new ArrayList<Thread>();
-        this.zonaComun=new ArrayList<Thread>();
+        this.zonaDescanso= new ArrayList<Humano>();
+        this.zonaComedor=new ArrayList<Humano>();
+        this.zonaComun=new ArrayList<Humano>();
+    }
+
+    public ArrayList<Humano> getZonaDescanso() {
+        return zonaDescanso;
+    }
+
+    public void setZonaDescanso(ArrayList<Humano> zonaDescanso) {
+        this.zonaDescanso = zonaDescanso;
+    }
+
+    public ArrayList<Humano> getZonaComedor() {
+        return zonaComedor;
+    }
+
+    public void setZonaComedor(ArrayList<Humano> zonaComedor) {
+        this.zonaComedor = zonaComedor;
+    }
+
+    public ArrayList<Humano> getZonaComun() {
+        return zonaComun;
+    }
+
+    public void setZonaComun(ArrayList<Humano> zonaComun) {
+        this.zonaComun = zonaComun;
     }
 
     private int almacen_comida=0;
