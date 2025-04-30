@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
@@ -15,157 +20,146 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="450.0" prefWidth="905.0" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Controlador.PantallaJuegoController">
-
-    <!-- Contenedor principal -->
-    <HBox layoutX="10.0" layoutY="21.666666666666668" spacing="10" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="21.666666666666668">
-
-        <!-- REFUGIO -->
-        <VBox prefWidth="250" spacing="10" style="-fx-border-color: navy; -fx-border-width: 2;">
-            <Label prefHeight="25.0" prefWidth="247.0" style="-fx-font-weight: bold; -fx-font-size: 16; -fx-alignment: center;" text="REFUGIO" />
-
-            <!-- Descanso -->
-            <VBox spacing="5" style="-fx-background-color: lightgray; -fx-padding: 5;">
-                <Label text="Descanso" />
-                <TextArea fx:id="txtDescanso" editable="false" prefRowCount="2" />
-            </VBox>
-
-            <!-- Comedor -->
-            <VBox spacing="5" style="-fx-background-color: lightgray; -fx-padding: 5;">
-                <Label text="Comedor" />
-                <HBox spacing="5">
-                    <TextArea fx:id="txtComedor" editable="false" prefRowCount="1" prefWidth="150" />
-                    <VBox>
-                        <Label text="Comida" />
-                        <TextField fx:id="txtComida" editable="false" prefWidth="50" />
-                    </VBox>
-                </HBox>
-            </VBox>
-
-            <!-- Zona común -->
-            <VBox spacing="5" style="-fx-background-color: lightgray; -fx-padding: 5;">
-                <Label text="Zona común" />
-                <TextArea fx:id="txtZonaComun" editable="false" prefRowCount="2" />
-            </VBox>
-        </VBox>
-
-        <!-- TUNELES -->
-        <GridPane alignment="center" hgap="10" prefWidth="300" style="-fx-border-color: gold; -fx-border-width: 2;" vgap="10">
-
-            <!-- Puedes usar fx:id para enlazar estos campos a tu controlador -->
-            <TextArea fx:id="tunel00" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.rowIndex="2" />
-            <TextArea fx:id="tunel01" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextArea fx:id="tunel02" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-
-            <TextArea fx:id="tunel10" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.rowIndex="3" />
-            <TextArea fx:id="tunel11" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextArea fx:id="tunel12" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-
-            <TextArea fx:id="tunel20" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.rowIndex="4" />
-            <TextArea fx:id="tunel21" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <TextArea fx:id="tunel22" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-         <TextArea editable="false" prefHeight="0.0" prefWidth="169.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-         <TextArea fx:id="tunel002" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-         <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="183.0" style="-fx-font-weight: bold; -fx-font-size: 16;" text="TÚNELES" textAlignment="RIGHT" GridPane.columnIndex="1" />
-         <TextArea fx:id="tunel001" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.rowIndex="1" />
-         <columnConstraints>
-            <ColumnConstraints />
-            <ColumnConstraints maxWidth="151.66664632161462" minWidth="142.99995930989587" prefWidth="142.99995930989587" />
-            <ColumnConstraints maxWidth="73.66670735677081" minWidth="65.00002034505206" prefWidth="73.66670735677081" />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-         </rowConstraints>
-        </GridPane>
-
-        <!-- ZONA DE RIESGO -->
-        <GridPane alignment="center" hgap="10" prefWidth="250" style="-fx-border-color: orange; -fx-border-width: 2;" vgap="10">
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="183.0" style="-fx-font-weight: bold; -fx-font-size: 16;" text="ZONA DE RIESGO" textAlignment="RIGHT" GridPane.columnSpan="2" />
-
-            <TextArea fx:id="riesgo00" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.rowIndex="3" />
-            <TextArea fx:id="riesgo01" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-
-            <TextArea fx:id="riesgo10" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.rowIndex="4" />
-            <TextArea fx:id="riesgo11" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-
-            <TextArea fx:id="riesgo20" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.rowIndex="5" />
-            <TextArea fx:id="riesgo21" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-         <TextArea fx:id="riesgo001" editable="false" prefColumnCount="5" prefHeight="53.0" prefRowCount="1" prefWidth="87.0" GridPane.rowIndex="1" />
-         <TextArea fx:id="riesgo002" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-         <columnConstraints>
-            <ColumnConstraints />
-            <ColumnConstraints />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-         </rowConstraints>
-        </GridPane>
-
-    </HBox>
-   <Slider fx:id="sliderVelocidad" blockIncrement="1.0" layoutX="146.0" layoutY="410.0" max="10.0" value="1.0" />
-   <Label layoutX="146.0" layoutY="373.0" text="Velocidad:">
-      <font>
-         <Font name="Baskerville Old Face" size="27.0" />
-      </font>
-   </Label>
-   <Label fx:id="labelVelocidadActual" alignment="CENTER" layoutX="271.0" layoutY="380.0" prefHeight="22.0" prefWidth="29.0" text="--">
-      <font>
-         <Font name="Baskerville Old Face" size="20.0" />
-      </font>
-   </Label>
-   <Label alignment="CENTER" layoutX="119.0" layoutY="401.0" prefHeight="22.0" prefWidth="29.0" text="_">
-      <font>
-         <Font name="Baskerville Old Face" size="19.0" />
-      </font>
-   </Label>
-   <Label alignment="CENTER" layoutX="283.0" layoutY="408.0" prefHeight="22.0" prefWidth="29.0" text="+">
-      <font>
-         <Font name="Baskerville Old Face" size="20.0" />
-      </font>
-   </Label>
-   <Button fx:id="botonPausar" layoutX="33.0" layoutY="372.0" mnemonicParsing="false" onAction="#onBotonPausar" prefHeight="40.0" prefWidth="40.0" text="I I" />
-   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#7c7c7c" height="24.0" layoutX="41.0" layoutY="380.0" onMouseClicked="#onBotonPausar" stroke="BLACK" strokeType="INSIDE" width="10.0" />
-   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#7c7c7c" height="24.0" layoutX="55.0" layoutY="380.0" onMouseClicked="#onBotonPausar" stroke="BLACK" strokeType="INSIDE" width="10.0" />
-   <Button fx:id="botonReanudar" layoutX="79.0" layoutY="372.0" mnemonicParsing="false" onAction="#onBotonReanudar" prefHeight="40.0" prefWidth="40.0" />
-   <Polygon fill="DODGERBLUE" layoutX="141.0" layoutY="379.0" onMouseClicked="#onBotonReanudar" points="-50.0, 24.22998046875, -30.77001953125, 13.22998046875, -50.0, 3.230010986328125" stroke="BLACK" strokeType="INSIDE" />
-   <Label layoutX="322.0" layoutY="379.0" prefHeight="24.0" prefWidth="129.0" text="Turno actual:">
-      <font>
-         <Font name="Baskerville Old Face" size="20.0" />
-      </font>
-   </Label>
-   <Label fx:id="labelTurnoActual" layoutX="439.0" layoutY="383.0" prefHeight="22.0" prefWidth="64.0" text="-----">
-      <font>
-         <Font name="Baskerville Old Face" size="18.0" />
-      </font>
-   </Label>
-   <Label layoutX="554.0" layoutY="377.0" text="Generador de zombies">
-      <font>
-         <Font name="Baskerville Old Face" size="25.0" />
-      </font>
-   </Label>
-   <Button fx:id="botonPintar" layoutX="492.0" layoutY="379.0" mnemonicParsing="false" onAction="#onPintarIndividuos" prefHeight="27.0" prefWidth="54.0" text="--" textFill="WHITE">
-      <font>
-         <Font name="Baskerville Old Face" size="16.0" />
-      </font>
-   </Button>
-   <Button fx:id="finalizarButton" layoutX="798.0" layoutY="398.0" mnemonicParsing="false" onAction="#onFinalizarButton" text="Finalizar">
-      <font>
-         <Font name="Baskerville Old Face" size="20.0" />
-      </font>
-   </Button>
-   <Button fx:id="guardarButton" layoutX="798.0" layoutY="352.0" mnemonicParsing="false" onAction="#onBotonGuardar" prefHeight="37.0" prefWidth="95.0" text="Guardar">
-      <font>
-         <Font name="Baskerville Old Face" size="19.0" />
-      </font>
-   </Button>
+<AnchorPane prefHeight="450.0" prefWidth="905.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Controlador.PantallaJuegoController">
+   <children>
+   
+       <!-- Contenedor principal -->
+       <HBox layoutX="10.0" layoutY="21.666666666666668" spacing="10" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="21.666666666666668">
+      <children>
+      
+              <!-- REFUGIO -->
+              <VBox prefWidth="250" spacing="10" style="-fx-border-color: navy; -fx-border-width: 2;">
+         <children>
+                     <Label prefHeight="25.0" prefWidth="247.0" style="-fx-font-weight: bold; -fx-font-size: 16; -fx-alignment: center;" text="REFUGIO" />
+         
+                     <!-- Descanso -->
+                     <VBox spacing="5" style="-fx-background-color: lightgray; -fx-padding: 5;">
+            <children>
+                            <Label text="Descanso" />
+                            <TextArea fx:id="txtDescanso" editable="false" prefRowCount="2" />
+            </children>
+                     </VBox>
+         
+                     <!-- Comedor -->
+                     <VBox spacing="5" style="-fx-background-color: lightgray; -fx-padding: 5;">
+            <children>
+                            <Label text="Comedor" />
+                            <HBox spacing="5">
+                               <children>
+                                   <TextArea fx:id="txtComedor" editable="false" prefRowCount="1" prefWidth="150" />
+                                   <VBox>
+                                      <children>
+                                          <Label text="Comida" />
+                                          <TextField fx:id="txtComida" editable="false" prefWidth="50" />
+                                      </children>
+                                   </VBox>
+                               </children>
+                            </HBox>
+            </children>
+                     </VBox>
+         
+                     <!-- Zona común -->
+                     <VBox spacing="5" style="-fx-background-color: lightgray; -fx-padding: 5;">
+            <children>
+                            <Label text="Zona común" />
+                            <TextArea fx:id="txtZonaComun" editable="false" prefRowCount="2" />
+            </children>
+                     </VBox>
+         </children>
+              </VBox>
+      
+              <!-- TUNELES -->
+              <GridPane alignment="center" hgap="10" prefWidth="300" style="-fx-border-color: gold; -fx-border-width: 2;" vgap="10">
+         <children>
+         
+                     <!-- Puedes usar fx:id para enlazar estos campos a tu controlador -->
+                     <TextArea fx:id="textTunel02" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.rowIndex="2" />
+                     <TextArea fx:id="textTunel12" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                     <TextArea fx:id="textTunel22" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+         
+                     <TextArea fx:id="textTunel03" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.rowIndex="3" />
+                     <TextArea fx:id="textTunel13" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                     <TextArea fx:id="textTunel23" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+         
+                     <TextArea fx:id="textTunel04" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.rowIndex="4" />
+                     <TextArea fx:id="textTunel14" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                     <TextArea fx:id="textTunel24" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                  <TextArea fx:id="textTunel11" editable="false" prefHeight="0.0" prefWidth="169.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextArea fx:id="textTunel21" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="183.0" style="-fx-font-weight: bold; -fx-font-size: 16;" text="TÚNELES" textAlignment="RIGHT" GridPane.columnIndex="1" />
+                  <TextArea fx:id="textTunel01" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.rowIndex="1" />
+         </children>
+               <columnConstraints>
+                  <ColumnConstraints />
+                  <ColumnConstraints maxWidth="151.66664632161462" minWidth="142.99995930989587" prefWidth="142.99995930989587" />
+                  <ColumnConstraints maxWidth="73.66670735677081" minWidth="65.00002034505206" prefWidth="73.66670735677081" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+               </rowConstraints>
+              </GridPane>
+      
+              <!-- ZONA DE RIESGO -->
+              <GridPane alignment="center" hgap="10" prefWidth="250" style="-fx-border-color: orange; -fx-border-width: 2;" vgap="10">
+         <children>
+                     <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="183.0" style="-fx-font-weight: bold; -fx-font-size: 16;" text="ZONA DE RIESGO" textAlignment="RIGHT" GridPane.columnSpan="2" />
+         
+                     <TextArea fx:id="textRiesgo03" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.rowIndex="3" />
+                     <TextArea fx:id="textRiesgo13" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+         
+                     <TextArea fx:id="textRiesgo04" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.rowIndex="4" />
+                     <TextArea fx:id="textRiesgo14" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+         
+                     <TextArea fx:id="textRiesgo05" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.rowIndex="5" />
+                     <TextArea fx:id="textRiesgo15" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <TextArea fx:id="textRiesgo01" editable="false" prefColumnCount="5" prefHeight="53.0" prefRowCount="1" prefWidth="87.0" GridPane.rowIndex="1" />
+                  <TextArea fx:id="textRiesgo11" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+         </children>
+               <columnConstraints>
+                  <ColumnConstraints />
+                  <ColumnConstraints />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+               </rowConstraints>
+              </GridPane>
+      </children>
+   
+       </HBox>
+      <Button fx:id="botonPausar" layoutX="33.0" layoutY="372.0" mnemonicParsing="false" onAction="#onBotonPausar" prefHeight="40.0" prefWidth="40.0" text="I I" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#7c7c7c" height="24.0" layoutX="41.0" layoutY="380.0" onMouseClicked="#onBotonPausar" stroke="BLACK" strokeType="INSIDE" width="10.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#7c7c7c" height="24.0" layoutX="55.0" layoutY="380.0" onMouseClicked="#onBotonPausar" stroke="BLACK" strokeType="INSIDE" width="10.0" />
+      <Button fx:id="botonReanudar" layoutX="79.0" layoutY="372.0" mnemonicParsing="false" onAction="#onBotonReanudar" prefHeight="40.0" prefWidth="40.0" />
+      <Polygon fill="DODGERBLUE" layoutX="141.0" layoutY="379.0" onMouseClicked="#onBotonReanudar" points="-50.0, 24.22998046875, -30.77001953125, 13.22998046875, -50.0, 3.230010986328125" stroke="BLACK" strokeType="INSIDE" />
+      <Label layoutX="276.0" layoutY="379.0" prefHeight="24.0" prefWidth="175.0" text="Tiempo en partida">
+         <font>
+            <Font name="Baskerville Old Face" size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="labelTurnoActual" layoutX="439.0" layoutY="383.0" prefHeight="22.0" prefWidth="64.0" text="-----">
+         <font>
+            <Font name="Baskerville Old Face" size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="554.0" layoutY="377.0" text="Generador de zombies">
+         <font>
+            <Font name="Baskerville Old Face" size="25.0" />
+         </font>
+      </Label>
+      <Button fx:id="finalizarButton" layoutX="798.0" layoutY="398.0" mnemonicParsing="false" onAction="#onFinalizarButton" text="Finalizar">
+         <font>
+            <Font name="Baskerville Old Face" size="20.0" />
+         </font>
+      </Button>
+   </children>
 
 </AnchorPane>

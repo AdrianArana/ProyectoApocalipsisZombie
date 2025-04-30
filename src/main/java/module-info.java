@@ -10,4 +10,6 @@ module programacionconcurrenteydistrubuida.proyectoapocalipsiszombie {
     exports programacionconcurrenteydistrubuida.proyectoapocalipsiszombie;
     exports programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Controlador;
     opens programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Controlador to javafx.fxml;
+    exports programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo;
+    opens programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo to javafx.fxml;
 }

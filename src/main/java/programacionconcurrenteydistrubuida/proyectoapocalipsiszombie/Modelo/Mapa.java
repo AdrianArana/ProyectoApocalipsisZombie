@@ -16,10 +16,10 @@ public class Mapa {
     ZonaRiesgo zonaRiesgo;
     ZonaTuneles zonaTuneles;
 
-    public Mapa(ZonaRefugio zonaRefugio, ZonaRiesgo zonaRiesgo, ZonaTuneles zonaTuneles) {
-        this.zonaRefugio = zonaRefugio;
-        this.zonaRiesgo = zonaRiesgo;
-        this.zonaTuneles = zonaTuneles;
+    public Mapa() {
+        this.zonaRefugio = new ZonaRefugio();
+        this.zonaRiesgo = new ZonaRiesgo();
+        this.zonaTuneles = new ZonaTuneles();
     }
 
 
