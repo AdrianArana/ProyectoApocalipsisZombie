@@ -80,7 +80,7 @@ public class Mapa {
     //FUNCIONES:
 
 
-    //FUNCIONES PARA HUMANO
+
 
     public void pasarTunelIda(int tunelElegido, Humano humano) throws BrokenBarrierException, InterruptedException {
         System.out.println("[TUNEL IDA] Humano " + humano.getIde() + " esperando barrera en túnel " + tunelElegido);
@@ -117,8 +117,6 @@ public class Mapa {
         locks_tuneles[tunelElegido].lock();
         while (tuneles_ocupados[tunelElegido]) {
             espera_vuelta[tunelElegido].await();
-            //Esperamos a que el tunel se libere
-
         }
 
         System.out.println("[TUNEL VUELTA] Humano " + humano.getIde() + " entrando en túnel " + tunelElegido);
@@ -145,13 +143,11 @@ public class Mapa {
             humano.setComida(0);
             lockZonaComedor.lock();
             esperarComida.signal();
-            //Avisamos a 2 humanos porque siempre se trae 2 de comida y cada uno come solo 1.
             esperarComida.signal();
             System.out.println("[DESCANSO] Se ha añadido comida al almacén.");
             lockZonaComedor.unlock();
         }
     }
-
 
     public void salirZonaDescanso(Humano humano) {
         lockZonaDescanso.lock();
@@ -159,7 +155,6 @@ public class Mapa {
         System.out.println("[DESCANSO] Humano " + humano.getIde() + " sale de la zona de descanso.");
         lockZonaDescanso.unlock();
     }
-
 
     public void entrarZonaRiesgo(int tunelTomado, Humano humano) throws InterruptedException {
         lockZonaRiesgo.lock();
@@ -219,24 +214,25 @@ public class Mapa {
         Humano humanoAtacado = null;
 
         synchronized (this) {
-            ArrayList<Humano> posiblesAtaques = new ArrayList<Humano>();
+            ArrayList<Humano> posiblesAtaques = new ArrayList<>();
             for (Thread individuo : zonaRiesgo.zonas[zonaZombie]) {
                 if (individuo.getClass() == Humano.class) {
-                    posiblesAtaques.add((Humano) individuo); // Los metemos si es humano
+                    posiblesAtaques.add((Humano) individuo);
                 }
             }
-            if (!posiblesAtaques.isEmpty()) {//Solo atacamos si hay humanos
+
+            if (!posiblesAtaques.isEmpty()) {
                 boolean encontrado = false;
-                while (!encontrado) {//Buscamos humano para atacar mientras haya en la zona de riesgo.
+                while (!encontrado) {
                     humanoAtacado = posiblesAtaques.get(random.nextInt(posiblesAtaques.size()));
-                    if (!humanoAtacado.getSiendoAtacado()) {//Si no esta siendo atacado, empezamos a atacarle
+                    if (!humanoAtacado.getSiendoAtacado()) {
                         humanoAtacado.setSiendoAtacado();
                         encontrado = true;
                     } else {
                         posiblesAtaques.clear();
                         for (Thread individuo : zonaRiesgo.zonas[zonaZombie]) {
                             if (individuo.getClass() == Humano.class) {
-                                posiblesAtaques.add((Humano) individuo); // Los metemos si es humano
+                                posiblesAtaques.add((Humano) individuo);
                             }
                         }
                         if (posiblesAtaques.isEmpty()) {
