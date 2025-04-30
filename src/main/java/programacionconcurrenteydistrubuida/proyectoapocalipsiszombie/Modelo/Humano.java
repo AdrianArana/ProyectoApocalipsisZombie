@@ -10,6 +10,10 @@ public class Humano extends Thread {
     private boolean marcado;
     Random random = new Random();
     private boolean siendoAtacado = false;
+    private boolean enPausa = false;
+    private final Object lock = new Object(); // Objeto para controlar la sincronización
+
+
 
     public Humano(Mapa mapa, String id) {
         this.mapa = mapa;
@@ -29,41 +33,48 @@ public class Humano extends Thread {
             try {
                 int tunelElegido = (int) (Math.random() * 4);
                 mapa.pasarTunelIda(tunelElegido, this);// Aqui se hace la espera
-                // para entrar al tunel, y después de entrar, se elimina de la zona comun
-
+                // para entrar al tunel, y después de entrar, se elimina de la zona comu
+                verificarPausa();  // Verificar si se debe pausar
                 mapa.entrarZonaRiesgo(tunelElegido, this);
+                verificarPausa();  // Verificar si se debe pausar
                 sleep(3000 + (int) (Math.random() * 2000));//Tiempo en la zona de riesgo
+                verificarPausa();  // Verificar si se debe pausar
 
                 if (marcado){
                     mapa.salirZonaRiesgo(tunelElegido, this);
-
                     marcado = false;
                     mapa.entrarZonaDescanso(this);
                     sleep(random.nextInt(2000) + 2000);//Descansa 2-4 segundos
+                    verificarPausa();  // Verificar si se debe pausar
                     mapa.salirZonaDescanso(this);
 
                     mapa.entrarZonaComedor(this);
                     sleep(3000 + (int) (Math.random() * 2000));//Come durante 3-5 segundos
+                    verificarPausa();  // Verificar si se debe pausar
                     mapa.salirZonaComedor(this);
 
                     mapa.entrarZonaDescanso(this);
                     sleep(3000 + (int) (Math.random() * 2000));//Descanso extra de 3 a 5 segundos
+                    verificarPausa();  // Verificar si se debe pausar
                     mapa.salirZonaDescanso(this);}
                 else {
                     mapa.salirZonaRiesgo(tunelElegido, this);
-
                     mapa.pasarTunelVuelta(tunelElegido, this);
-
                     mapa.entrarZonaDescanso(this);
                     sleep(random.nextInt(2000) + 2000);//Descansa 2-4 segundos
+                    verificarPausa();  // Verificar si se debe pausar
                     mapa.salirZonaDescanso(this);
 
                     mapa.entrarZonaComedor(this);
                     sleep(3000 + (int) (Math.random() * 2000));//Come durante 3-5 segundos
+                    verificarPausa();  // Verificar si se debe pausar
                     mapa.salirZonaComedor(this);
 
                 }
                 mapa.entrarZonaComun(this);
+
+                verificarPausa();  // Verificar si se debe pausar
+
             } catch (BrokenBarrierException e) {
                 throw new RuntimeException(e);
             } catch (InterruptedException e) {
@@ -72,6 +83,25 @@ public class Humano extends Thread {
         }
     }
 
+
+    public synchronized void suspender() {
+        enPausa = true;  // Marca el humano como pausado
+    }
+
+    public synchronized void reanudar() {
+        enPausa = false;  // Marca el humano como no pausado
+        synchronized (lock) {
+            lock.notify();  // Notifica al humano para que reanude su ejecución
+        }
+    }
+
+    private void verificarPausa() throws InterruptedException {
+        synchronized (lock) {
+            while (enPausa) {  // Si está pausado, espera
+                lock.wait();
+            }
+        }
+    }
 
     public int getComida() {
         return comida;

@@ -8,6 +8,10 @@ public class Zombie extends Thread {
     private String id; //Z____
     Random random=new Random();
     private int kills=0;
+    private boolean enPausa = false;
+    private final Object lock = new Object(); // Objeto para sincronización
+// Control de pausa
+
 
 
     public void sumarKills(){
@@ -30,11 +34,34 @@ public class Zombie extends Thread {
             try {
                 nuevaZona = mapa.cambiarDeZona(nuevaZona,this);
                 mapa.atacar(this,nuevaZona);
+                verificarPausa();
+
                 Thread.sleep(random.nextInt(1000) + 2000);
 
+                verificarPausa();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
     }
+
+    public synchronized void suspender() {
+        enPausa = true;  // Marca al zombie como pausado
+    }
+
+    public synchronized void reanudar() {
+        enPausa = false;  // Marca al zombie como no pausado
+        synchronized (lock) {
+            lock.notify();  // Notifica al zombie para que reanude su ejecución
+        }
+    }
+
+    private void verificarPausa() throws InterruptedException {
+        synchronized (lock) {
+            while (enPausa) {  // Si está pausado, espera
+                lock.wait();
+            }
+        }
+    }
+
 }

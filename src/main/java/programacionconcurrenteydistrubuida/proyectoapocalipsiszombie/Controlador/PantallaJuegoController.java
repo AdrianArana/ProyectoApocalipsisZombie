@@ -42,26 +42,73 @@ public class PantallaJuegoController {
     public TextArea textRiesgo01;
     public TextArea textRiesgo11;
 
-    private ArrayList<Humano> lista_humanos;//lista humanos creada para luego hacer el reanudar
+    private ArrayList<Humano> lista_humanos=new ArrayList<Humano>();//lista humanos creada para luego hacer el reanudar
+    public ArrayList<Zombie> lista_zombis=new ArrayList<Zombie>(); // Lista de hilos de zombis
+    private boolean juegoPausado = false; // Bandera para pausar el juego
 
     public void setData(Mapa mapa){
         this.mapa = mapa;
+        lista_humanos = new ArrayList<>();
+        lista_zombis = new ArrayList<>();
 
     }
+
+
+    public synchronized void pausarJuego() {
+        juegoPausado = true;
+
+        // Suspendemos todos los hilos de los humanos
+        for (Humano humano : lista_humanos) {
+            humano.suspender();
+        }
+
+        // Suspendemos todos los hilos de los zombis
+        for (Zombie zombie : lista_zombis) {
+            zombie.suspender();
+        }
+    }
     public void onBotonPausar(MouseEvent mouseEvent) {
+        pausarJuego();
+    }
+
+
+
+    public synchronized void reanudarJuego() {
+        juegoPausado = false;
+
+        // Reanudamos todos los hilos de los humanos
+        for (Humano humano : lista_humanos) {
+            humano.reanudar();
+        }
+
+        // Reanudamos todos los hilos de los zombis
+        for (Zombie zombie : lista_zombis) {
+            zombie.reanudar();
+        }
     }
 
     public void onBotonReanudar(ActionEvent actionEvent) {
+        reanudarJuego();
+
+    }
+
+
+    public void onBotonReanudarHumano() {
+        // Cuando se reanuda el juego, creas los hilos para los humanos
         for (int i = 0; i < 1; i++) {
             String id = String.format("H%04d", i);
-            System.out.println(id);
-            Humano humano = new Humano(mapa,id);
+            Humano humano = new Humano(mapa, id);
             lista_humanos.add(humano);
-            humano.start();
+            humano.start(); // Inicia el hilo del humano
         }
-        Zombie zombie = new Zombie(("Z0000"),mapa,0);
-        zombie.start();    }
+    }
 
+
+    public void onBotonReanudarZombie() {
+        Zombie zombie = new Zombie("Z0000", mapa, 0);
+        lista_zombis.add(zombie);
+        zombie.start(); // Inicia el hilo del zombie
+    }
     public void recorrerTodo(){
 
     }
