@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="400.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Controlador.PantallaJuegoController">
+
+    <!-- Contenedor principal -->
+    <HBox spacing="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10">
+
+        <!-- REFUGIO -->
+        <VBox prefWidth="250" spacing="10" style="-fx-border-color: navy; -fx-border-width: 2;">
+            <Label prefHeight="25.0" prefWidth="247.0" style="-fx-font-weight: bold; -fx-font-size: 16; -fx-alignment: center;" text="REFUGIO" />
+
+            <!-- Descanso -->
+            <VBox spacing="5" style="-fx-background-color: lightgray; -fx-padding: 5;">
+                <Label text="Descanso" />
+                <TextArea fx:id="txtDescanso" editable="false" prefRowCount="2" />
+            </VBox>
+
+            <!-- Comedor -->
+            <VBox spacing="5" style="-fx-background-color: lightgray; -fx-padding: 5;">
+                <Label text="Comedor" />
+                <HBox spacing="5">
+                    <TextArea fx:id="txtComedor" editable="false" prefRowCount="1" prefWidth="150" />
+                    <VBox>
+                        <Label text="Comida" />
+                        <TextField fx:id="txtComida" editable="false" prefWidth="50" />
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <!-- Zona común -->
+            <VBox spacing="5" style="-fx-background-color: lightgray; -fx-padding: 5;">
+                <Label text="Zona común" />
+                <TextArea fx:id="txtZonaComun" editable="false" prefRowCount="2" />
+            </VBox>
+        </VBox>
+
+        <!-- TUNELES -->
+        <GridPane alignment="center" hgap="10" prefWidth="300" style="-fx-border-color: gold; -fx-border-width: 2;" vgap="10">
+
+            <!-- Puedes usar fx:id para enlazar estos campos a tu controlador -->
+            <TextArea fx:id="tunel00" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.rowIndex="2" />
+            <TextArea fx:id="tunel01" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextArea fx:id="tunel02" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+
+            <TextArea fx:id="tunel10" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.rowIndex="3" />
+            <TextArea fx:id="tunel11" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextArea fx:id="tunel12" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+
+            <TextArea fx:id="tunel20" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.rowIndex="4" />
+            <TextArea fx:id="tunel21" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextArea fx:id="tunel22" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+         <TextArea editable="false" prefHeight="0.0" prefWidth="169.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+         <TextArea fx:id="tunel001" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.rowIndex="1" />
+         <TextArea fx:id="tunel002" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+         <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="183.0" style="-fx-font-weight: bold; -fx-font-size: 16;" text="TÚNELES" textAlignment="RIGHT" GridPane.columnIndex="1" />
+         <columnConstraints>
+            <ColumnConstraints />
+            <ColumnConstraints />
+            <ColumnConstraints />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+         </rowConstraints>
+        </GridPane>
+
+        <!-- ZONA DE RIESGO -->
+        <GridPane alignment="center" hgap="10" prefWidth="250" style="-fx-border-color: orange; -fx-border-width: 2;" vgap="10">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="183.0" style="-fx-font-weight: bold; -fx-font-size: 16;" text="ZONA DE RIESGO" textAlignment="RIGHT" GridPane.columnSpan="2" />
+
+            <TextArea fx:id="riesgo00" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <TextArea fx:id="riesgo01" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+            <TextArea fx:id="riesgo10" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+            <TextArea fx:id="riesgo11" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+            <TextArea fx:id="riesgo20" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+            <TextArea fx:id="riesgo21" editable="false" prefColumnCount="5" prefRowCount="1" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+         <columnConstraints>
+            <ColumnConstraints />
+            <ColumnConstraints />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+         </rowConstraints>
+        </GridPane>
+
+    </HBox>
+
+</AnchorPane>
