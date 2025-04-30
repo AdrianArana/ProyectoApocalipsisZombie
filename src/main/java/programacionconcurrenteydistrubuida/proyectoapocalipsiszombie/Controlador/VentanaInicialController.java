@@ -18,10 +18,13 @@ public class VentanaInicialController {
         Stage stage = new Stage();
         FXMLLoader fxmlLoader = new FXMLLoader(VistaPrincipal.class.getResource("nombre.fxml"));
         try {
-            Scene scene = new Scene(fxmlLoader.load(), 750, 500);
-            stage.setTitle("Nombre");
+            Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+            stage.setTitle("Apocalipsis Zombie");
             stage.setScene(scene);
+            stage.setResizable(false);
+            stage.centerOnScreen();
             stage.show();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -32,10 +35,13 @@ public class VentanaInicialController {
         Stage stage = new Stage();
         FXMLLoader fxmlLoader = new FXMLLoader(VistaPrincipal.class.getResource("creditos.fxml"));
         try {
-            Scene scene = new Scene(fxmlLoader.load(), 750, 500);
-            stage.setTitle("Creditos");
+            Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+            stage.setTitle("Creditos de Apocalipsis Zombie");
             stage.setScene(scene);
+            stage.setResizable(false); // Opcional
+            stage.centerOnScreen();
             stage.show();
+
         } catch (Exception e) {
             e.printStackTrace();
         }

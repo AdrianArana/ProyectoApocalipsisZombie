@@ -52,10 +52,13 @@ public class NombreController {////SEGUNDA VENTANA
         Stage stage = new Stage();
         FXMLLoader fxmlLoader = new FXMLLoader(VistaPrincipal.class.getResource("ventanaInicial.fxml"));
         try {
-            Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-            stage.setTitle("Ventana Inicial");
+            Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+            stage.setTitle("Apocalipsis Zombie");
             stage.setScene(scene);
+            stage.setResizable(false);
+            stage.centerOnScreen();
             stage.show();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
