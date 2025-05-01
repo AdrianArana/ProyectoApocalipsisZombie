@@ -156,6 +156,11 @@ public class PantallaJuegoController {
     }
 
     private void recorrerZonaTuneles() {
+        ArrayList<String> listaGrupos0 = new ArrayList<>();
+        ArrayList<String> listaGrupos1 = new ArrayList<>();
+        ArrayList<String> listaGrupos2 = new ArrayList<>();
+        ArrayList<String> listaGrupos3 = new ArrayList<>();
+
         ArrayList<String> listaIDesTunel0 = new ArrayList<>();
         ArrayList<String> listaIDesTunel1 = new ArrayList<>();
         ArrayList<String> listaIDesTunel2 = new ArrayList<>();
