@@ -38,7 +38,7 @@ public class ZonaRefugio {
         this.zonaComun = zonaComun;
     }
 
-    private int almacen_comida=0;
+    private int almacen_comida=1000;
 
     public synchronized int getAlmacen_comida() {
         return almacen_comida;
