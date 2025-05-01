@@ -12,6 +12,19 @@ public class Humano extends Thread {
     private boolean siendoAtacado = false;
     private boolean muerte = false;
 
+
+
+
+
+    //añado nuevo ahora para ver si funciona atacar
+    public final Object lock=new Object();
+
+
+
+
+
+
+
     public void morir(boolean muerto) {
         this.muerte = muerto;
     }
@@ -96,7 +109,7 @@ public class Humano extends Thread {
         return this.siendoAtacado;
     }
 
-    public synchronized void setSiendoAtacado() {//Synchronized para que no puedan atacarle 2 zombies a la vez
-        this.siendoAtacado = true;
+    public synchronized void setSiendoAtacado(boolean siendoAtacado) {//Synchronized para que no puedan atacarle 2 zombies a la vez
+        this.siendoAtacado=siendoAtacado;
     }
 }
