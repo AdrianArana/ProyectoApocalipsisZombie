@@ -80,18 +80,20 @@ public class PantallaJuegoController {
         }
     }
 
-    public void onBotonReanudar(ActionEvent actionEvent) {
+    public void onBotonReanudar(ActionEvent actionEvent) throws InterruptedException {
         botonReanudar.setDisable(true);
         botonPausar.setDisable(false);
         if (!empezado) {
             empezado = true;
+            recorrerTodo();
+
             Zombie z = new Zombie("Z0000", mapa, 0);
             z.start();
-            for (int i = 1; i < 3; i++) {
+            for (int i = 1; i < 4; i++) {
                 Humano h = new Humano(mapa, String.format("H%04d", i));
                 h.start();
+                Thread.sleep(500);
             }
-            recorrerTodo();
         } else {
             reanudarJuego();
         }

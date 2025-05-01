@@ -45,7 +45,7 @@ public class Humano extends Thread {
         while (true) {
             //Generados en la zona comun
             try {
-                int tunelElegido = (int) (Math.random() * 4);
+                int tunelElegido = (int) (Math.random() * 1);
                 mapa.pasarTunelIda(tunelElegido, this);// Aqui se hace la espera
                 // para entrar al tunel, y después de entrar, se elimina de la zona comun
                 mapa.entrarZonaRiesgo(tunelElegido, this);
