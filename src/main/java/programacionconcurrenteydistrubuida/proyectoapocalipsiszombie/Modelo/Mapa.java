@@ -50,10 +50,10 @@ public class Mapa {
     //private int kills = 0;
     private int[] quierenVolver = new int[4];
     CyclicBarrier[] cb_tuneles = {
-            new CyclicBarrier(3),
-            new CyclicBarrier(3),
-            new CyclicBarrier(3),
-            new CyclicBarrier(3)
+            new CyclicBarrier(1),
+            new CyclicBarrier(1),
+            new CyclicBarrier(1),
+            new CyclicBarrier(1)
     };
     Semaphore[] sem_Tuneles = {
             new Semaphore(1, true),
@@ -196,6 +196,20 @@ public class Mapa {
         System.out.println("[COMUN] Humano " + humano.getIde() + " entra a la zona común.");
         lockZonaComun.unlock();
     }
+//
+//    public int cambiarDeZona(int zonaInicial, Zombie zombie) {
+//        lockZonaRiesgo[zonaInicial].lock();
+//        zonaRiesgo.zonas[zonaInicial].remove(zombie);
+//        lockZonaRiesgo[zonaInicial].unlock();
+//
+//        int nueva_zona = random.nextInt(4);
+//        lockZonaRiesgo[nueva_zona].lock();
+//
+//        zonaRiesgo.zonas[nueva_zona].add(zombie);
+//        //System.out.println("[ZOMBIE] Zombie " + zombie.getIde() + " se mueve de zona " + zonaInicial + " a " + nueva_zona);
+//        lockZonaRiesgo[nueva_zona].unlock();
+//        return nueva_zona;
+//    }
 
     public int cambiarDeZona(int zonaInicial, Zombie zombie) {
         lockZonaRiesgo[zonaInicial].lock();
@@ -206,72 +220,158 @@ public class Mapa {
         lockZonaRiesgo[nueva_zona].lock();
 
         zonaRiesgo.zonas[nueva_zona].add(zombie);
-        //System.out.println("[ZOMBIE] Zombie " + zombie.getIde() + " se mueve de zona " + zonaInicial + " a " + nueva_zona);
         lockZonaRiesgo[nueva_zona].unlock();
         return nueva_zona;
     }
+
+//
+//    public void atacar(Zombie zombie, int zonaZombie) throws InterruptedException {
+//        boolean dejarDeAtacar = false;
+//        Humano humanoAtacado = null;
+//
+//        synchronized (zonaRiesgo.zonas[zonaZombie]) {
+//            ArrayList<Humano> posiblesAtaques = new ArrayList<>();
+//            for (Thread individuo : zonaRiesgo.zonas[zonaZombie]) {
+//                if (individuo instanceof Humano) {
+//                    posiblesAtaques.add((Humano) individuo);
+//                }
+//            }
+//
+//            if (!posiblesAtaques.isEmpty()) {
+//                boolean encontrado = false;
+//                while (!encontrado) {
+//                    humanoAtacado = posiblesAtaques.get(random.nextInt(posiblesAtaques.size()));
+//                    if (!humanoAtacado.getSiendoAtacado()) {
+//                        humanoAtacado.setSiendoAtacado();
+//                        encontrado = true;
+//                    } else {
+//                        posiblesAtaques.clear();
+//                        synchronized (lockZonaRiesgo[zonaZombie]) {
+//                            for (Thread individuo : zonaRiesgo.zonas[zonaZombie]) {
+//                                if (individuo instanceof Humano) {
+//                                    posiblesAtaques.add((Humano) individuo);
+//                                }
+//                            }
+//                        }
+//
+//                        if (posiblesAtaques.isEmpty()) {
+//                            dejarDeAtacar = true;
+//                            encontrado = true;
+//                        }
+//                    }
+//                }
+//            }
+//
+//
+//            if (!dejarDeAtacar && humanoAtacado != null) {
+//                boolean gana = (((int) (Math.random() * 3)) == 0);
+//                if (gana) {
+//                    System.out.println("[ATAQUE] Zombie " + zombie.getIde() + " mata a humano " + humanoAtacado.getIde());
+//                    humanoAtacado.morir(true);
+//                    Thread.sleep(random.nextInt(1000) + 500);
+//                    zombie.sumarKills();
+//                    zonaRiesgo.zonas[zonaZombie].remove(humanoAtacado);
+//                    String idZombieNuevo = ("Z" + humanoAtacado.getIde().substring(1, 5));
+//                    Zombie zombieNuevo = new Zombie(idZombieNuevo, this, zonaZombie);
+//                    zombieNuevo.start();
+//                } else {
+//                    System.out.println("[ATAQUE] Humano " + humanoAtacado.getIde() + " sobrevive al ataque del zombieEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE " + zombie.getIde());
+//                    int milisAtaque = random.nextInt(1000) + 500;
+//                    humanoAtacado.sleep(milisAtaque);
+//                    humanoAtacado.marcarHumano();
+//                    humanoAtacado.setComida(0);
+//                    sleep(milisAtaque);
+//                    pasarTunelVuelta(zonaZombie, humanoAtacado);
+//                }
+//            }
+//        }
+//    }
+
 
     public void atacar(Zombie zombie, int zonaZombie) throws InterruptedException {
         boolean dejarDeAtacar = false;
         Humano humanoAtacado = null;
 
+        System.out.println("[DEBUG] Zombie " + zombie.getIde() + " buscando humano para ataque en zona " + zonaZombie);
+
         synchronized (zonaRiesgo.zonas[zonaZombie]) {
             ArrayList<Humano> posiblesAtaques = new ArrayList<>();
             for (Thread individuo : zonaRiesgo.zonas[zonaZombie]) {
-                if (individuo.getClass() == Humano.class) {
+                if (individuo instanceof Humano) {
                     posiblesAtaques.add((Humano) individuo);
                 }
             }
+
+            System.out.println("[DEBUG] Humanos posibles para ataque: " + posiblesAtaques.size());
 
             if (!posiblesAtaques.isEmpty()) {
                 boolean encontrado = false;
                 while (!encontrado) {
                     humanoAtacado = posiblesAtaques.get(random.nextInt(posiblesAtaques.size()));
-                    if (!humanoAtacado.getSiendoAtacado()) {
-                        humanoAtacado.setSiendoAtacado();
-                        encontrado = true;
-                    } else {
-                        posiblesAtaques.clear();
-                        synchronized (lockZonaRiesgo[zonaZombie]) {
-                            for (Thread individuo : zonaRiesgo.zonas[zonaZombie]) {
-                                if (individuo.getClass() == Humano.class) {
-                                    posiblesAtaques.add((Humano) individuo);
+                    System.out.println("[DEBUG] Zombie " + zombie.getIde() + " intenta atacar a " + humanoAtacado.getIde());
+
+                    synchronized (humanoAtacado.lock) {
+                        if (!humanoAtacado.getSiendoAtacado()) {
+                            humanoAtacado.setSiendoAtacado(true);
+                            System.out.println("[DEBUG] Humano " + humanoAtacado.getIde() + " marcado como siendo atacado.");
+                            encontrado = true;
+                        } else {
+                            System.out.println("[DEBUG] Humano " + humanoAtacado.getIde() + " ya estaba siendo atacado. Reintentando...");
+                            posiblesAtaques.clear();
+
+                            synchronized (lockZonaRiesgo[zonaZombie]) {
+                                for (Thread individuo : zonaRiesgo.zonas[zonaZombie]) {
+                                    if (individuo instanceof Humano) {
+                                        posiblesAtaques.add((Humano) individuo);
+                                    }
                                 }
                             }
-                        }
 
-                        if (posiblesAtaques.isEmpty()) {
-                            dejarDeAtacar = true;
-                            encontrado = true;
+                            if (posiblesAtaques.isEmpty()) {
+                                System.out.println("[DEBUG] No quedan humanos disponibles para atacar en zona " + zonaZombie);
+                                dejarDeAtacar = true;
+                                encontrado = true;
+                            }
                         }
                     }
                 }
             }
 
-
             if (!dejarDeAtacar && humanoAtacado != null) {
-                boolean gana = (((int) (Math.random() * 3)) == 0);
-                if (gana) {
-                    System.out.println("[ATAQUE] Zombie " + zombie.getIde() + " mata a humano " + humanoAtacado.getIde());
-                    humanoAtacado.morir(true);
-                    Thread.sleep(random.nextInt(1000) + 500);
-                    zombie.sumarKills();
-                    zonaRiesgo.zonas[zonaZombie].remove(humanoAtacado);
-                    String idZombieNuevo = ("Z" + humanoAtacado.getIde().substring(1, 5));
-                    Zombie zombieNuevo = new Zombie(idZombieNuevo, this, zonaZombie);
-                    zombieNuevo.start();
-                } else {
-                    System.out.println("[ATAQUE] Humano " + humanoAtacado.getIde() + " sobrevive al ataque del zombieEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE " + zombie.getIde());
-                    int milisAtaque = random.nextInt(1000) + 500;
-                    humanoAtacado.sleep(milisAtaque);
-                    humanoAtacado.marcarHumano();
-                    humanoAtacado.setComida(0);
-                    sleep(milisAtaque);
-                    pasarTunelVuelta(zonaZombie, humanoAtacado);
+                synchronized (humanoAtacado.lock) {
+                    boolean gana = (((int) (Math.random() * 3)) == 0);
+
+                    if (gana) {
+                        System.out.println("[ATAQUE] Zombie " + zombie.getIde() + " mata a humano " + humanoAtacado.getIde());
+                        humanoAtacado.morir(true);
+                        Thread.sleep(random.nextInt(1000) + 500);
+                        zombie.sumarKills();
+                        zonaRiesgo.zonas[zonaZombie].remove(humanoAtacado);
+
+                        String idZombieNuevo = "Z" + humanoAtacado.getIde().substring(1, 5);
+                        System.out.println("[DEBUG] Se crea nuevo zombie con ID " + idZombieNuevo);
+                        Zombie zombieNuevo = new Zombie(idZombieNuevo, this, zonaZombie);
+                        zombieNuevo.start();
+                    } else {
+                        System.out.println("[ATAQUE] Humano " + humanoAtacado.getIde() + " sobrevive al ataque del zombie " + zombie.getIde());
+                        humanoAtacado.setSiendoAtacado(false);
+
+                        int milisAtaque = random.nextInt(1000) + 500;
+                        humanoAtacado.sleep(milisAtaque);
+                        humanoAtacado.marcarHumano();
+                        humanoAtacado.setComida(0);
+                        sleep(milisAtaque);
+                        System.out.println("[DEBUG] Humano " + humanoAtacado.getIde() + " huye por túnel tras sobrevivir.");
+                        pasarTunelVuelta(zonaZombie, humanoAtacado);
+                    }
                 }
             }
         }
+
+        System.out.println("[DEBUG] Zombie " + zombie.getIde() + " finalizó intento de ataque en zona " + zonaZombie);
     }
+
+
 
 //
 //    //FUNCIONES PARA HUMANO

@@ -41,7 +41,7 @@ public class Zombie extends Thread {
                 mapa.atacar(this,nuevaZona);
                 verificarPausa();
 
-                Thread.sleep(random.nextInt(1000) + 2000);
+                Thread.sleep(random.nextInt(1000) );//le hemos bajao pa que ataque frecuentemente todo
 
                 verificarPausa();
             } catch (InterruptedException e) {

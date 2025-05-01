@@ -6,7 +6,7 @@ public class Hilo extends Thread {
     @Override
     public void run() {
         while (true) {
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 4; i++)
                 System.out.print("h");
             if (parado) {
                 try {
