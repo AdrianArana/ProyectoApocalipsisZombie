@@ -1,17 +1,22 @@
 package programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Controlador;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo.Humano;
 import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo.Mapa;
 import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo.Zombie;
+import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.VistaPrincipal;
 
 import java.util.ArrayList;
 
 public class PantallaJuegoController {
+    public Button finalizarButton;
     private Mapa mapa;
     public Button botonPausar;
     public Label labelTurnoActual;
@@ -238,6 +243,22 @@ public class PantallaJuegoController {
     }
 
     public void onFinalizarButton(ActionEvent actionEvent) {
+        Stage stageAntiguo = (Stage) finalizarButton.getScene().getWindow();
+        stageAntiguo.close();
+        Stage stage = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader(VistaPrincipal.class.getResource("finJuego.fxml"));
+        try {
+            Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+            stage.setTitle("Apocalipsis Zombie ACABADO");
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.centerOnScreen();
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void onBotonGuardar(ActionEvent actionEvent) {
