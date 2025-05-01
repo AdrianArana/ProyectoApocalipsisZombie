@@ -50,10 +50,10 @@ public class Mapa {
     //private int kills = 0;
     private int[] quierenVolver = new int[4];
     CyclicBarrier[] cb_tuneles = {
-            new CyclicBarrier(1),
-            new CyclicBarrier(1),
-            new CyclicBarrier(1),
-            new CyclicBarrier(1)
+            new CyclicBarrier(3),
+            new CyclicBarrier(3),
+            new CyclicBarrier(3),
+            new CyclicBarrier(3)
     };
     Semaphore[] sem_Tuneles = {
             new Semaphore(1, true),
