@@ -110,7 +110,7 @@ public class PantallaJuegoController {
                 Humano h = new Humano(mapa, String.format("H%04d", i));
                 lista_humanos.add(h);
                 h.start();
-                sleep(500);
+                //sleep(500);//todo
             }
         } else {
             reanudarJuego();
