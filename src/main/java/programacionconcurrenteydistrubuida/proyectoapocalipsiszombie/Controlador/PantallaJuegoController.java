@@ -55,7 +55,9 @@ public class PantallaJuegoController {
         this.mapa = mapa;
     }
 
-    public synchronized void pausarJuego(){}
+    public synchronized void pausarJuego() {
+    }
+
     /*public synchronized void pausarJuego() {
         // Suspendemos todos los hilos de los humanos
         for (Humano humano : lista_humanos) {
@@ -88,16 +90,17 @@ public class PantallaJuegoController {
     public void onBotonReanudar(ActionEvent actionEvent) throws InterruptedException {
         botonReanudar.setDisable(true);
         botonPausar.setDisable(false);
+        recorrerTodo();
+
         if (!empezado) {
             empezado = true;
-            recorrerTodo();
 
             Zombie z = new Zombie("Z0000", mapa, 0);
             z.start();
+
             for (int i = 1; i < 40; i++) {
                 Humano h = new Humano(mapa, String.format("H%04d", i));
                 h.start();
-                Thread.sleep(500);
             }
         } else {
             reanudarJuego();
@@ -129,7 +132,7 @@ public class PantallaJuegoController {
         new Thread(() -> {
             while (true) {
                 try {
-                    Thread.sleep(1000); // Intervalo de 1 segundo entre ejecuciones
+                    Thread.sleep(200); // Intervalo de 1 segundo entre ejecuciones
                     recorrerZonaRefugio();
                     recorrerZonaRiesgo();
                     recorrerZonaTuneles();
@@ -145,15 +148,21 @@ public class PantallaJuegoController {
         ArrayList<String> listaIDesDescanso = new ArrayList<>();
         ArrayList<String> listaIDesComedor = new ArrayList<>();
         ArrayList<String> listaIDesZonaComun = new ArrayList<>();
-        for (Humano humano : mapa.getZonaRefugio().getZonaDescanso()) {
 
-            listaIDesDescanso.add(humano.getIde());
+        if (!mapa.getZonaRefugio().getZonaDescanso().isEmpty()) {
+            for (Humano humano : mapa.getZonaRefugio().getZonaDescanso()) {
+                listaIDesDescanso.add(humano.getIde());
+            }
         }
-        for (Humano humano : mapa.getZonaRefugio().getZonaComedor()) {
-            listaIDesComedor.add(humano.getIde());
+        if (!mapa.getZonaRefugio().getZonaComedor().isEmpty()) {
+            for (Humano humano : mapa.getZonaRefugio().getZonaComedor()) {
+                listaIDesComedor.add(humano.getIde());
+            }
         }
-        for (Humano humano : mapa.getZonaRefugio().getZonaComun()) {
-            listaIDesZonaComun.add(humano.getIde());
+        if (!mapa.getZonaRefugio().getZonaComun().isEmpty()) {
+            for (Humano humano : mapa.getZonaRefugio().getZonaComun()) {
+                listaIDesZonaComun.add(humano.getIde());
+            }
         }
         txtComida.setText("" + mapa.getZonaRefugio().getAlmacen_comida());
         txtDescanso.setText(listaIDesDescanso.toString());
@@ -162,7 +171,7 @@ public class PantallaJuegoController {
 
     }
 
-    private void recorrerZonaTuneles() {
+    private synchronized void recorrerZonaTuneles() {
         ArrayList<String> listaGrupos0 = new ArrayList<>();
         ArrayList<String> listaGrupos1 = new ArrayList<>();
         ArrayList<String> listaGrupos2 = new ArrayList<>();
@@ -172,22 +181,58 @@ public class PantallaJuegoController {
         ArrayList<String> listaIDesTunel1 = new ArrayList<>();
         ArrayList<String> listaIDesTunel2 = new ArrayList<>();
         ArrayList<String> listaIDesTunel3 = new ArrayList<>();
-        for (Humano humano : mapa.getZonaTuneles().getTuneles()[0]) {
-            listaIDesTunel0.add(humano.getIde());
+
+        if (!mapa.getZonaTuneles().getZonasEspera()[0].isEmpty()) {
+            for (Humano humano : mapa.getZonaTuneles().getZonasEspera()[0]) {
+                listaGrupos0.add(humano.getIde());
+            }
+        }if (!mapa.getZonaTuneles().getZonasEspera()[1].isEmpty()) {
+            for (Humano humano : mapa.getZonaTuneles().getZonasEspera()[1]) {
+                listaGrupos1.add(humano.getIde());
+            }
+        }if (!mapa.getZonaTuneles().getZonasEspera()[2].isEmpty()) {
+            for (Humano humano : mapa.getZonaTuneles().getZonasEspera()[2]) {
+                listaGrupos2.add(humano.getIde());
+            }
+        }if (!mapa.getZonaTuneles().getZonasEspera()[3].isEmpty()) {
+            for (Humano humano : mapa.getZonaTuneles().getZonasEspera()[3]) {
+                listaGrupos3.add(humano.getIde());
+            }
         }
-        for (Humano humano : mapa.getZonaTuneles().getTuneles()[1]) {
-            listaIDesTunel1.add(humano.getIde());
+
+        if (!mapa.getZonaTuneles().getTuneles()[0].isEmpty()) {
+            for (Humano humano : mapa.getZonaTuneles().getTuneles()[0]) {
+                listaIDesTunel0.add(humano.getIde());
+            }
         }
-        for (Humano humano : mapa.getZonaTuneles().getTuneles()[2]) {
-            listaIDesTunel2.add(humano.getIde());
+        if (!mapa.getZonaTuneles().getTuneles()[1].isEmpty()) {
+
+            for (Humano humano : mapa.getZonaTuneles().getTuneles()[1]) {
+                listaIDesTunel1.add(humano.getIde());
+            }
         }
-        for (Humano humano : mapa.getZonaTuneles().getTuneles()[3]) {
-            listaIDesTunel3.add(humano.getIde());
+        if (!mapa.getZonaTuneles().getTuneles()[2].isEmpty()) {
+
+            for (Humano humano : mapa.getZonaTuneles().getTuneles()[2]) {
+                listaIDesTunel2.add(humano.getIde());
+            }
+        }
+        if (!mapa.getZonaTuneles().getTuneles()[3].isEmpty()) {
+
+            for (Humano humano : mapa.getZonaTuneles().getTuneles()[3]) {
+                listaIDesTunel3.add(humano.getIde());
+            }
         }
         textTunel11.setText(listaIDesTunel0.toString());
         textTunel12.setText(listaIDesTunel1.toString());
         textTunel13.setText(listaIDesTunel2.toString());
         textTunel14.setText(listaIDesTunel3.toString());
+
+        textTunel01.setText(listaGrupos0.toString());
+        textTunel02.setText(listaGrupos1.toString());
+        textTunel03.setText(listaGrupos2.toString());
+        textTunel04.setText(listaGrupos3.toString());
+
 
     }
 
@@ -200,33 +245,41 @@ public class PantallaJuegoController {
         ArrayList<String> listaIDZRiesgo1 = new ArrayList<>();
         ArrayList<String> listaIDZRiesgo2 = new ArrayList<>();
         ArrayList<String> listaIDZRiesgo3 = new ArrayList<>();
+        if (!mapa.getZonaRiesgo().getZonas()[0].isEmpty()) {
+            for (Thread thread : mapa.getZonaRiesgo().getZonas()[0]) {
+                if (thread.getClass() == Humano.class) {
+                    listaIDHRiesgo0.add(((Humano) thread).getIde());
+                } else {
+                    listaIDZRiesgo0.add(((Zombie) thread).getIde());
+                }
+            }
+        }
+        if (!mapa.getZonaRiesgo().getZonas()[1].isEmpty()) {
+            for (Thread thread : mapa.getZonaRiesgo().getZonas()[1]) {
+                if (thread.getClass() == Humano.class) {
+                    listaIDHRiesgo1.add(((Humano) thread).getIde());
+                } else {
+                    listaIDZRiesgo1.add(((Zombie) thread).getIde());
+                }
+            }
+        }
+        if (!mapa.getZonaRiesgo().getZonas()[2].isEmpty()) {
+            for (Thread thread : mapa.getZonaRiesgo().getZonas()[2]) {
+                if (thread.getClass() == Humano.class) {
+                    listaIDHRiesgo2.add(((Humano) thread).getIde());
+                } else {
+                    listaIDZRiesgo2.add(((Zombie) thread).getIde());
+                }
+            }
+        }
+        if (!mapa.getZonaRiesgo().getZonas()[3].isEmpty()) {
+            for (Thread thread : mapa.getZonaRiesgo().getZonas()[3]) {
 
-        for (Thread thread : mapa.getZonaRiesgo().getZonas()[0]) {
-            if (thread.getClass() == Humano.class) {
-                listaIDHRiesgo0.add(((Humano) thread).getIde());
-            } else {
-                listaIDZRiesgo0.add(((Zombie) thread).getIde());
-            }
-        }
-        for (Thread thread : mapa.getZonaRiesgo().getZonas()[1]) {
-            if (thread.getClass() == Humano.class) {
-                listaIDHRiesgo1.add(((Humano) thread).getIde());
-            } else {
-                listaIDZRiesgo1.add(((Zombie) thread).getIde());
-            }
-        }
-        for (Thread thread : mapa.getZonaRiesgo().getZonas()[2]) {
-            if (thread.getClass() == Humano.class) {
-                listaIDHRiesgo2.add(((Humano) thread).getIde());
-            } else {
-                listaIDZRiesgo2.add(((Zombie) thread).getIde());
-            }
-        }
-        for (Thread thread : mapa.getZonaRiesgo().getZonas()[3]) {
-            if (thread.getClass() == Humano.class) {
-                listaIDHRiesgo3.add(((Humano) thread).getIde());
-            } else {
-                listaIDZRiesgo3.add(((Zombie) thread).getIde());
+                if (thread.getClass() == Humano.class) {
+                    listaIDHRiesgo3.add(((Humano) thread).getIde());
+                } else {
+                    listaIDZRiesgo3.add(((Zombie) thread).getIde());
+                }
             }
         }
         textRiesgo01.setText(listaIDHRiesgo0.toString());
