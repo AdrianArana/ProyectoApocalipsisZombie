@@ -94,7 +94,7 @@ public class PantallaJuegoController {
 
             Zombie z = new Zombie("Z0000", mapa, 0);
             z.start();
-            for (int i = 1; i < 4; i++) {
+            for (int i = 1; i < 40; i++) {
                 Humano h = new Humano(mapa, String.format("H%04d", i));
                 h.start();
                 Thread.sleep(500);

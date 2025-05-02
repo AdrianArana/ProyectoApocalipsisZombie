@@ -69,9 +69,10 @@ public class Mapa {
     Lock[] locks_tuneles = new Lock[]{new ReentrantLock(), new ReentrantLock(), new ReentrantLock(), new ReentrantLock()};
 
 
-    Condition[] espera_vuelta = new Condition[]{locks_tuneles[0].newCondition(), locks_tuneles[1].newCondition(), locks_tuneles[2].newCondition(), locks_tuneles[3].newCondition()};
+    Condition[] espera_ida = new Condition[]{locks_tuneles[0].newCondition(), locks_tuneles[1].newCondition(), locks_tuneles[2].newCondition(), locks_tuneles[3].newCondition()};
     //Para que esperen los individuos a que pasen los que vueven al salir a la zona de riesgo
-    Condition[] espera_salida = new Condition[]{locks_tuneles[0].newCondition(), locks_tuneles[1].newCondition(), locks_tuneles[2].newCondition(), locks_tuneles[3].newCondition()};
+    Condition[] espera_sala_intermedia = new Condition[]{locks_tuneles[0].newCondition(), locks_tuneles[1].newCondition(), locks_tuneles[2].newCondition(), locks_tuneles[3].newCondition()};
+    Condition[] espera_vuelta = new Condition[]{locks_tuneles[0].newCondition(), locks_tuneles[1].newCondition(), locks_tuneles[2].newCondition(), locks_tuneles[3].newCondition()};
 
     boolean[] tuneles_ocupados = new boolean[]{false, false, false, false};
 
@@ -81,55 +82,136 @@ public class Mapa {
 
 
     public void pasarTunelIda(int tunelElegido, Humano humano) throws BrokenBarrierException, InterruptedException {
+        cb_tuneles[tunelElegido].await();
+        while (zonaTuneles.zonasEspera[tunelElegido].size() == 3) {
+            espera_sala_intermedia.wait();
+        }
+        zonaRefugio.zonaComun.remove(humano);
+        locks_tuneles[tunelElegido].lock();
+        zonaTuneles.zonasEspera[tunelElegido].add(humano);
+        while (tuneles_ocupados[tunelElegido]) {
+            espera_ida[tunelElegido].wait();
+        }
+        tuneles_ocupados[tunelElegido] = true;
+        zonaTuneles.tuneles[tunelElegido].add(humano);
+        sleep(1000);
+        zonaTuneles.tuneles[tunelElegido].remove(humano);
+        tuneles_ocupados[tunelElegido] = false;
+        if (quierenVolver[tunelElegido] > 0) {
+            espera_vuelta[tunelElegido].signal();
+        } else {
+            espera_ida[tunelElegido].signal();
+
+        }
+        locks_tuneles[tunelElegido].unlock();
+    }
+
+    public void pasarTunelVuelta(int tunelElegido, Humano humano) throws InterruptedException {
+        quierenVolver[tunelElegido]++;
+        locks_tuneles[tunelElegido].lock();
+        while (tuneles_ocupados[tunelElegido]) {
+            espera_vuelta[tunelElegido].wait();
+        }
+        tuneles_ocupados[tunelElegido] = true;
+        zonaTuneles.tuneles[tunelElegido].add(humano);
+        sleep(1000);
+        zonaTuneles.tuneles[tunelElegido].remove(humano);
+        tuneles_ocupados[tunelElegido] = false;
+        quierenVolver[tunelElegido]--;
+        if (quierenVolver[tunelElegido] > 0) {
+            espera_vuelta[tunelElegido].signal();
+        } else {
+            espera_ida[tunelElegido].signal();
+
+        }
+        locks_tuneles[tunelElegido].unlock();
+    }
+
+    public void pasarTunelIdaa(int tunelElegido, Humano humano) throws BrokenBarrierException, InterruptedException {
         System.out.println("[TUNEL IDA] Humano " + humano.getIde() + " esperando barrera en túnel " + tunelElegido);
         cb_tuneles[tunelElegido].await();
         System.out.println("[TUNEL IDA] Humano " + humano.getIde() + " esperando semáforo túnel " + tunelElegido);
         sem_Tuneles[tunelElegido].acquire();
         locks_tuneles[tunelElegido].lock();
-
-        System.out.println("[TUNEL IDA] Humano " + humano.getIde() + " entra al túnel " + tunelElegido);
-        zonaRefugio.zonaComun.remove(humano);
-        zonaTuneles.tuneles[tunelElegido].add(humano);
-        tuneles_ocupados[tunelElegido] = true;
-        locks_tuneles[tunelElegido].unlock();
+        try {
+            System.out.println("[TUNEL IDA] Humano " + humano.getIde() + " entra al túnel " + tunelElegido);
+            zonaRefugio.zonaComun.remove(humano);
+            zonaTuneles.tuneles[tunelElegido].add(humano);
+            tuneles_ocupados[tunelElegido] = true;
+        } finally {
+            locks_tuneles[tunelElegido].unlock();
+        }
 
         sleep(1000);
 
         locks_tuneles[tunelElegido].lock();
-        zonaTuneles.tuneles[tunelElegido].remove(humano);
-        tuneles_ocupados[tunelElegido] = false;
+        try {
+            zonaTuneles.tuneles[tunelElegido].remove(humano);
+            tuneles_ocupados[tunelElegido] = false;
 
-        while (quierenVolver[tunelElegido] > 0) {
-            System.out.println("[TUNEL IDA] Humano " + humano.getIde() + " espera a que pasen los que quieren volver en túnel " + tunelElegido);
-            espera_vuelta[tunelElegido].signal();
-            espera_salida[tunelElegido].await();
+            while (quierenVolver[tunelElegido] > 0) {
+                espera_sala_intermedia[tunelElegido].await();
+                espera_ida[tunelElegido].signal();
+            }
+        } finally {
+            locks_tuneles[tunelElegido].unlock();
         }
-        locks_tuneles[tunelElegido].unlock();
         sem_Tuneles[tunelElegido].release();
         System.out.println("[TUNEL IDA] Humano " + humano.getIde() + " ha cruzado el túnel " + tunelElegido);
     }
 
-    public void pasarTunelVuelta(int tunelElegido, Humano humano) throws InterruptedException {
+    public void pasarTunelVueltaa(int tunelElegido, Humano humano) throws InterruptedException {
         System.out.println("[TUNEL VUELTA] Humano " + humano.getIde() + " quiere volver por túnel " + tunelElegido);
         quierenVolver[tunelElegido]++;
         locks_tuneles[tunelElegido].lock();
-        while (tuneles_ocupados[tunelElegido]) {
-            espera_vuelta[tunelElegido].await();
-        }
+        try {
+            while (tuneles_ocupados[tunelElegido]) {
+                espera_ida[tunelElegido].await();
+            }
 
-        System.out.println("[TUNEL VUELTA] Humano " + humano.getIde() + " entrando en túnel " + tunelElegido);
-        zonaTuneles.tuneles[tunelElegido].add(humano);
-        locks_tuneles[tunelElegido].unlock();
+            System.out.println("[TUNEL VUELTA] Humano " + humano.getIde() + " entrando en túnel " + tunelElegido);
+            zonaTuneles.tuneles[tunelElegido].add(humano);
+        } finally {
+            locks_tuneles[tunelElegido].unlock();
+        }
 
         sleep(1000);
 
         locks_tuneles[tunelElegido].lock();
-        zonaTuneles.tuneles[tunelElegido].remove(humano);
-        espera_salida[tunelElegido].signal();
-        quierenVolver[tunelElegido]--;
-        locks_tuneles[tunelElegido].unlock();
+        try {
+            zonaTuneles.tuneles[tunelElegido].remove(humano);
+            espera_sala_intermedia[tunelElegido].signal();
+            quierenVolver[tunelElegido]--;
+        } finally {
+            locks_tuneles[tunelElegido].unlock();
+        }
         System.out.println("[TUNEL VUELTA] Humano " + humano.getIde() + " ha cruzado el túnel de vuelta " + tunelElegido);
     }
+
+
+    public void mostrarEsperaTunel(int tunelElegido) {
+        System.out.println("[TUNEL IDA] Inicializando grupo de espera en túnel " + tunelElegido);
+        for (int i = 1; i <= 3; i++) {
+            Humano humano = new Humano(this, "H" + tunelElegido + "_" + i);
+            zonaTuneles.zonasEspera[tunelElegido].add(humano);
+            System.out.println("[TUNEL IDA] Humano " + humano.getIde() + " esperando en túnel " + tunelElegido);
+        }
+    }
+
+    public void simularPasoTunel(int tunelElegido) throws InterruptedException {
+        while (true) {
+            mostrarEsperaTunel(tunelElegido);
+
+            for (int i = 0; i < 3; i++) {
+                Humano humano = zonaTuneles.zonasEspera[tunelElegido].remove(0);
+                System.out.println("[TUNEL IDA] Humano " + humano.getIde() + " pasa por el túnel " + tunelElegido);
+                sleep(1000); // Simula el tiempo que tarda en cruzar
+            }
+
+            System.out.println("[TUNEL IDA] Grupo completo ha cruzado el túnel " + tunelElegido);
+        }
+    }
+
 
     public void entrarZonaDescanso(Humano humano) {
         lockZonaDescanso.lock();
@@ -308,7 +390,7 @@ public class Mapa {
                 boolean encontrado = false;
                 while (!encontrado) {
                     humanoAtacado = posiblesAtaques.get(random.nextInt(posiblesAtaques.size()));
-                   // System.out.println("[DEBUG] Zombie " + zombie.getIde() + " intenta atacar a " + humanoAtacado.getIde());
+                    // System.out.println("[DEBUG] Zombie " + zombie.getIde() + " intenta atacar a " + humanoAtacado.getIde());
 
                     synchronized (humanoAtacado.lock) {
                         if (!humanoAtacado.getSiendoAtacado()) {
@@ -328,7 +410,7 @@ public class Mapa {
                             }
 
                             if (posiblesAtaques.isEmpty()) {
-                               // System.out.println("[DEBUG] No quedan humanos disponibles para atacar en zona " + zonaZombie);
+                                // System.out.println("[DEBUG] No quedan humanos disponibles para atacar en zona " + zonaZombie);
                                 dejarDeAtacar = true;
                                 encontrado = true;
                             }
@@ -344,7 +426,7 @@ public class Mapa {
                     if (gana) {
                         //System.out.println("[ATAQUE] Zombie " + zombie.getIde() + " mata a humano " + humanoAtacado.getIde());
                         humanoAtacado.morir(true);
-                        Thread.sleep(random.nextInt(1000) + 500);
+                        Thread.sleep(random.nextInt(1000));//todo
                         zombie.sumarKills();
                         zonaRiesgo.zonas[zonaZombie].remove(humanoAtacado);
 
@@ -353,10 +435,10 @@ public class Mapa {
                         Zombie zombieNuevo = new Zombie(idZombieNuevo, this, zonaZombie);
                         zombieNuevo.start();
                     } else {
-                       // System.out.println("[ATAQUE] Humano " + humanoAtacado.getIde() + " sobrevive al ataque del zombie " + zombie.getIde());
+                        // System.out.println("[ATAQUE] Humano " + humanoAtacado.getIde() + " sobrevive al ataque del zombie " + zombie.getIde());
                         humanoAtacado.setSiendoAtacado(false);
 
-                        int milisAtaque = random.nextInt(1000) + 500;
+                        int milisAtaque = random.nextInt(1000);//todo
                         humanoAtacado.sleep(milisAtaque);
                         humanoAtacado.marcarHumano();
                         humanoAtacado.setComida(0);
@@ -370,7 +452,6 @@ public class Mapa {
 
         //System.out.println("[DEBUG] Zombie " + zombie.getIde() + " finalizó intento de ataque en zona " + zonaZombie);
     }
-
 
 
 //
@@ -555,4 +636,3 @@ public class Mapa {
 //        }
 //    }
 }
-
