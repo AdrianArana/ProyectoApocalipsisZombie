@@ -15,6 +15,8 @@ import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.VistaPrinci
 
 import java.util.ArrayList;
 
+import static java.lang.Thread.sleep;
+
 public class PantallaJuegoController {
     public Button finalizarButton;
     private Mapa mapa;
@@ -57,6 +59,8 @@ public class PantallaJuegoController {
 
     public void setData(Mapa mapa) {
         this.mapa = mapa;
+        recorrerTodo();
+
     }
 
     public synchronized void pausarJuego() {
@@ -94,7 +98,6 @@ public class PantallaJuegoController {
     public void onBotonReanudar(ActionEvent actionEvent) throws InterruptedException {
         botonReanudar.setDisable(true);
         botonPausar.setDisable(false);
-        recorrerTodo();
 
         if (!empezado) {
             empezado = true;
@@ -103,10 +106,11 @@ public class PantallaJuegoController {
             z.start();
             lista_hilos.add(z);
 
-            for (int i = 1; i < 40; i++) {
+            for (int i = 1; i < 20; i++) {
                 Humano h = new Humano(mapa, String.format("H%04d", i));
                 lista_humanos.add(h);
                 h.start();
+                sleep(500);
             }
         } else {
             reanudarJuego();
@@ -138,7 +142,7 @@ public class PantallaJuegoController {
         new Thread(() -> {
             while (true) {
                 try {
-                    Thread.sleep(200); // Intervalo de 1 segundo entre ejecuciones
+                    sleep(200); // Intervalo de 1 segundo entre ejecuciones
                     recorrerZonaRefugio();
                     recorrerZonaRiesgo();
                     recorrerZonaTuneles();
@@ -238,8 +242,6 @@ public class PantallaJuegoController {
         textTunel02.setText(listaGrupos1.toString());
         textTunel03.setText(listaGrupos2.toString());
         textTunel04.setText(listaGrupos3.toString());
-
-
     }
 
     private void recorrerZonaRiesgo() {

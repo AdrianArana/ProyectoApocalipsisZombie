@@ -54,7 +54,7 @@ public class Humano extends Thread {
                     break;
                 } else {
                     if (marcado) {
-                        mapa.salirZonaRiesgo(tunelElegido, this);
+
                         marcado = false;
                         mapa.entrarZonaDescanso(this);
                         sleep(random.nextInt(2000) + 2000);//Descansa 2-4 segundos
@@ -68,7 +68,6 @@ public class Humano extends Thread {
                         sleep(3000 + (int) (Math.random() * 2000));//Descanso extra de 3 a 5 segundos
                         mapa.salirZonaDescanso(this);
                     } else {
-                        mapa.salirZonaRiesgo(tunelElegido, this);
                         mapa.pasarTunelVuelta(tunelElegido, this);
                         mapa.entrarZonaDescanso(this);
                         sleep(random.nextInt(2000) + 2000);//Descansa 2-4 segundos
