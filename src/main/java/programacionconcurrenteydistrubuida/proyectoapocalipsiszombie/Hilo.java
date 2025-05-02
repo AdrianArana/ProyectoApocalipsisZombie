@@ -1,4 +1,4 @@
-package programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Controlador;
+package programacionconcurrenteydistrubuida.proyectoapocalipsiszombie;
 
 public class Hilo extends Thread {
     private boolean parado = false;
