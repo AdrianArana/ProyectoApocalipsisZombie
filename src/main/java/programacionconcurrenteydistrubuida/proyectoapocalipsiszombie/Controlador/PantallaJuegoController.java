@@ -48,6 +48,10 @@ public class PantallaJuegoController {
     public TextArea textRiesgo01;
     public TextArea textRiesgo11;
 
+
+    private ArrayList<Thread> lista_hilos = new ArrayList<>();
+
+
     private ArrayList<Humano> lista_humanos = new ArrayList<Humano>();//lista humanos creada para luego hacer el reanudar
     public ArrayList<Zombie> lista_zombis = new ArrayList<Zombie>(); // Lista de hilos de zombis
     // Bandera para pausar el juego
@@ -100,9 +104,11 @@ public class PantallaJuegoController {
 
             Zombie z = new Zombie("Z0000", mapa, 0);
             z.start();
+            lista_hilos.add(z);
 
             for (int i = 1; i < 20; i++) {
                 Humano h = new Humano(mapa, String.format("H%04d", i));
+                lista_humanos.add(h);
                 h.start();
                 sleep(500);
             }
@@ -294,10 +300,15 @@ public class PantallaJuegoController {
         textRiesgo15.setText(listaIDZRiesgo3.toString());
     }
 
-    public void onPintarIndividuos(ActionEvent actionEvent) {
-    }
 
+    public void pararTodo(){
+        System.exit(0);        //todo
+    }
     public void onFinalizarButton(ActionEvent actionEvent) {
+
+        pararTodo();
+
+
         Stage stageAntiguo = (Stage) finalizarButton.getScene().getWindow();
         stageAntiguo.close();
         Stage stage = new Stage();
