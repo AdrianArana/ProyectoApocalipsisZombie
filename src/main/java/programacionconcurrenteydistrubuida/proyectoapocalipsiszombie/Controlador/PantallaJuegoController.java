@@ -19,9 +19,13 @@ import static java.lang.Thread.sleep;
 
 public class PantallaJuegoController {
     public Button finalizarButton;
+    public TextField txtNoHumanos;
+    public TextField txtMejorZombie;
+    public TextField txtNoZombies;
+    public TextField txtMayorCantidadKills;
+    public TextField txtTiempo;
     private Mapa mapa;
     public Button botonPausar;
-    public Label labelTurnoActual;
     public Button botonReanudar;
     public TextArea txtDescanso;
     public TextArea txtComedor;
@@ -49,112 +53,75 @@ public class PantallaJuegoController {
     public TextArea textRiesgo11;
 
 
-    private ArrayList<Thread> lista_hilos = new ArrayList<>();
-
-
-    private ArrayList<Humano> lista_humanos = new ArrayList<Humano>();//lista humanos creada para luego hacer el reanudar
-    public ArrayList<Zombie> lista_zombis = new ArrayList<Zombie>(); // Lista de hilos de zombis
     // Bandera para pausar el juego
     private boolean empezado = false;
 
     public void setData(Mapa mapa) {
         this.mapa = mapa;
-        recorrerTodo();
-
+        mapa.setPausado(false);
+        botonPausar.setDisable(true);
     }
 
-    public synchronized void pausarJuego() {
-    }
-
-    /*public synchronized void pausarJuego() {
-        // Suspendemos todos los hilos de los humanos
-        for (Humano humano : lista_humanos) {
-            humano.suspender();
-        }
-        // Suspendemos todos los hilos de los zombis
-        for (Zombie zombie : lista_zombis) {
-            zombie.suspender();
-        }
-    }
-*/
     public void onBotonPausar(ActionEvent mouseEvent) {
         botonReanudar.setDisable(false);
         botonPausar.setDisable(true);
-        pausarJuego();
+        mapa.pausarHilos();
     }
 
-
-    public synchronized void reanudarJuego() {
-        // Reanudamos todos los hilos de los humanos
-        for (Humano humano : lista_humanos) {
-            //humano.reanudar();
-        }
-        // Reanudamos todos los hilos de los zombis
-        for (Zombie zombie : lista_zombis) {
-            zombie.reanudar();
-        }
-    }
 
     public void onBotonReanudar(ActionEvent actionEvent) throws InterruptedException {
         botonReanudar.setDisable(true);
+        botonReanudar.setText("Reanudar");
         botonPausar.setDisable(false);
 
         if (!empezado) {
             empezado = true;
-
             Zombie z = new Zombie("Z0000", mapa, 0);
             z.start();
-            lista_hilos.add(z);
-
-            for (int i = 1; i < 20; i++) {
-                Humano h = new Humano(mapa, String.format("H%04d", i));
-                lista_humanos.add(h);
-                h.start();
-                //sleep(500);//todo
-            }
-        } else {
-            reanudarJuego();
-        }
-    }
-
-
-    public void onBotonReanudarHumano() {
-        // Cuando se reanuda el juego, creas los hilos para los humanos
-        for (int i = 0; i < 1; i++) {
-            String id = String.format("H%04d", i);
-            Humano humano = new Humano(mapa, id);
-            lista_humanos.add(humano);
-            humano.start(); // Inicia el hilo del humano
-        }
-
-        Zombie zombie = new Zombie(("Z0000"), mapa, 0);
-        zombie.start();
-    }
-
-
-    public void onBotonReanudarZombie() {
-        Zombie zombie = new Zombie("Z0000", mapa, 0);
-        lista_zombis.add(zombie);
-        zombie.start(); // Inicia el hilo del zombie
-    }
-
-    private void recorrerTodo() {
-        new Thread(() -> {
-            while (true) {
-                try {
-                    sleep(200); // Intervalo de 1 segundo entre ejecuciones
-                    recorrerZonaRefugio();
-                    recorrerZonaRiesgo();
-                    recorrerZonaTuneles();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    break; // Salir del bucle si el hilo es interrumpido
+            new Thread(() -> {
+                for (int i = 1; i < 40; i++) {
+                    mapa.sumarNumeroHumanos(1);
+                    Humano h = new Humano(mapa, String.format("H%04d", i));
+                    h.start();
+                    try {
+                        sleep(500);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-            }
-        }).start();
+            }).start();
+            new Thread(() -> {
+                int dost = 0;
+                while (true) {
+                    try {
+                        mapa.verificarPausa();
+
+                        sleep(500); // Intervalo de 0.5 segundos entre ejecuciones
+                        //sleep(1000);
+                        dost++;
+                        txtTiempo.setText(""+((int)(dost/2)));
+                        //txtTiempo.setText(""+dost);
+
+                        recorrerZonaRefugio();
+                        recorrerZonaRiesgo();
+                        recorrerZonaTuneles();
+                        txtNoZombies.setText("" + (mapa.getNumeroKills() + 1));
+                        txtNoHumanos.setText("" + mapa.getNumeroHumanos());
+                        txtMejorZombie.setText(mapa.getMejorZombie());
+                        txtMayorCantidadKills.setText("" + mapa.getMayoresKills());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        break; // Salir del bucle si el hilo es interrumpido
+                    }
+                }
+            }).start();
+        } else {
+            mapa.reanudarHilos();
+        }
     }
 
-    private void recorrerZonaRefugio() {
+
+    private synchronized void recorrerZonaRefugio() {
         ArrayList<String> listaIDesDescanso = new ArrayList<>();
         ArrayList<String> listaIDesComedor = new ArrayList<>();
         ArrayList<String> listaIDesZonaComun = new ArrayList<>();
@@ -171,6 +138,7 @@ public class PantallaJuegoController {
         }
         if (!mapa.getZonaRefugio().getZonaComun().isEmpty()) {
             for (Humano humano : mapa.getZonaRefugio().getZonaComun()) {
+                assert humano != null;
                 listaIDesZonaComun.add(humano.getIde());
             }
         }
@@ -196,15 +164,18 @@ public class PantallaJuegoController {
             for (Humano humano : mapa.getZonaTuneles().getZonasEspera()[0]) {
                 listaGrupos0.add(humano.getIde());
             }
-        }if (!mapa.getZonaTuneles().getZonasEspera()[1].isEmpty()) {
+        }
+        if (!mapa.getZonaTuneles().getZonasEspera()[1].isEmpty()) {
             for (Humano humano : mapa.getZonaTuneles().getZonasEspera()[1]) {
                 listaGrupos1.add(humano.getIde());
             }
-        }if (!mapa.getZonaTuneles().getZonasEspera()[2].isEmpty()) {
+        }
+        if (!mapa.getZonaTuneles().getZonasEspera()[2].isEmpty()) {
             for (Humano humano : mapa.getZonaTuneles().getZonasEspera()[2]) {
                 listaGrupos2.add(humano.getIde());
             }
-        }if (!mapa.getZonaTuneles().getZonasEspera()[3].isEmpty()) {
+        }
+        if (!mapa.getZonaTuneles().getZonasEspera()[3].isEmpty()) {
             for (Humano humano : mapa.getZonaTuneles().getZonasEspera()[3]) {
                 listaGrupos3.add(humano.getIde());
             }
@@ -244,7 +215,7 @@ public class PantallaJuegoController {
         textTunel04.setText(listaGrupos3.toString());
     }
 
-    private void recorrerZonaRiesgo() {
+    private synchronized void recorrerZonaRiesgo() {
         ArrayList<String> listaIDHRiesgo0 = new ArrayList<>();
         ArrayList<String> listaIDHRiesgo1 = new ArrayList<>();
         ArrayList<String> listaIDHRiesgo2 = new ArrayList<>();
@@ -301,9 +272,10 @@ public class PantallaJuegoController {
     }
 
 
-    public void pararTodo(){
+    public void pararTodo() {
         System.exit(0);        //todo
     }
+
     public void onFinalizarButton(ActionEvent actionEvent) {
 
         pararTodo();
@@ -325,8 +297,5 @@ public class PantallaJuegoController {
             e.printStackTrace();
         }
 
-    }
-
-    public void onBotonGuardar(ActionEvent actionEvent) {
     }
 }
