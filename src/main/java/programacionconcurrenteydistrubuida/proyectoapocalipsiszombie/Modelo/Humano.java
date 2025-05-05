@@ -13,16 +13,8 @@ public class Humano extends Thread {
     private boolean muerte = false;
 
 
-
-
-
     //añado nuevo ahora para ver si funciona atacar
-    public final Object lock=new Object();
-
-
-
-
-
+    public final Object lock = new Object();
 
 
     public void morir(boolean muerto) {
@@ -46,37 +38,51 @@ public class Humano extends Thread {
             //Generados en la zona comun
             try {
                 int tunelElegido = (int) (Math.random() * 4);
+                mapa.verificarPausa();
                 mapa.pasarTunelIda(tunelElegido, this);// Aqui se hace la espera
                 // para entrar al tunel, y después de entrar, se elimina de la zona comun
+                mapa.verificarPausa();
                 mapa.entrarZonaRiesgo(tunelElegido, this);
+                mapa.verificarPausa();
                 sleep(3000 + (int) (Math.random() * 2000));//Tiempo en la zona de riesgo
                 if (muerte) {
                     break;
                 } else {
                     if (marcado) {
-
                         marcado = false;
                         mapa.entrarZonaDescanso(this);
                         sleep(random.nextInt(2000) + 2000);//Descansa 2-4 segundos
+                        mapa.verificarPausa();
                         mapa.salirZonaDescanso(this);
-
+                        mapa.verificarPausa();
                         mapa.entrarZonaComedor(this);
+                        mapa.verificarPausa();
                         sleep(3000 + (int) (Math.random() * 2000));//Come durante 3-5 segundos
-                        mapa.salirZonaComedor(this);
+                        mapa.verificarPausa();
 
+                        mapa.salirZonaComedor(this);
+                        mapa.verificarPausa();
                         mapa.entrarZonaDescanso(this);
+                        mapa.verificarPausa();
                         sleep(3000 + (int) (Math.random() * 2000));//Descanso extra de 3 a 5 segundos
+                        mapa.verificarPausa();
                         mapa.salirZonaDescanso(this);
                     } else {
+                        mapa.verificarPausa();
                         mapa.pasarTunelVuelta(tunelElegido, this);
+                        mapa.verificarPausa();
                         mapa.entrarZonaDescanso(this);
                         sleep(random.nextInt(2000) + 2000);//Descansa 2-4 segundos
+                        mapa.verificarPausa();
                         mapa.salirZonaDescanso(this);
+                        mapa.verificarPausa();
 
                         mapa.entrarZonaComedor(this);
                         sleep(3000 + (int) (Math.random() * 2000));//Come durante 3-5 segundos
-                        mapa.salirZonaComedor(this);
+                        mapa.verificarPausa();
 
+                        mapa.salirZonaComedor(this);
+                        mapa.verificarPausa();
                     }
                     mapa.entrarZonaComun(this);
                     sleep(1000);
@@ -109,6 +115,10 @@ public class Humano extends Thread {
     }
 
     public synchronized void setSiendoAtacado(boolean siendoAtacado) {//Synchronized para que no puedan atacarle 2 zombies a la vez
-        this.siendoAtacado=siendoAtacado;
+        this.siendoAtacado = siendoAtacado;
+    }
+
+    public void dormir(int milis) throws InterruptedException {
+        sleep(milis);
     }
 }

@@ -11,15 +11,12 @@ public class Zombie extends Thread {
     }
 
     private String id; //Z____
-    Random random=new Random();
-    private int kills=0;
-    private boolean enPausa = false;
-    private final Object lock = new Object(); // Objeto para sincronización
-// Control de pausa
+    Random random = new Random();
+    private int kills = 0;
 
 
 
-    public void sumarKills(){
+    public void sumarKills() {
         kills++;
     }
 
@@ -33,40 +30,31 @@ public class Zombie extends Thread {
     @Override
     public void run() {
         mapa.zonaRiesgo.zonas[zonaInicial].add(this); ///cuando construimos el zombie le pasamos una zona,
-                                                        /// se usa por ejemplo en la funcion de atarcar en Mapa
+        /// se usa por ejemplo en la funcion de atarcar en Mapa
         int nuevaZona = zonaInicial;
-        while ( true) {
+        while (true) {
             try {
-                nuevaZona = mapa.cambiarDeZona(nuevaZona,this);
-                mapa.atacar(this,nuevaZona);
-                verificarPausa();
-
-                Thread.sleep(random.nextInt(1000) );//le hemos bajao pa que ataque frecuentemente todo
-
-                verificarPausa();
+                mapa.verificarPausa();
+                nuevaZona = mapa.cambiarDeZona(nuevaZona, this);
+                mapa.verificarPausa();
+                mapa.atacar(this, nuevaZona);
+                dormir(random.nextInt(1000));//le hemos bajao pa que ataque frecuentemente todo
             } catch (InterruptedException e) {
-                System.out.println("HAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                System.out.println("Excepcion en zombie");
             }
         }
     }
 
-    public synchronized void suspender() {
-        enPausa = true;  // Marca al zombie como pausado
-    }
 
-    public synchronized void reanudar() {
-        enPausa = false;  // Marca al zombie como no pausado
-        synchronized (lock) {
-            lock.notify();  // Notifica al zombie para que reanude su ejecución
+    public void dormir(int milis) {
+        try{
+            sleep(milis);
+        } catch(InterruptedException e){
+            System.out.println(e.getMessage());
         }
     }
 
-    private void verificarPausa() throws InterruptedException {
-        synchronized (lock) {
-            while (enPausa) {  // Si está pausado, espera
-                lock.wait();
-            }
-        }
+    public int getNumeroKills() {
+        return kills;
     }
-
 }

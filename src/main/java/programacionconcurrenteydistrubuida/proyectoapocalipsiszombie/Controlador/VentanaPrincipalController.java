@@ -23,7 +23,7 @@ public class VentanaPrincipalController {
         Stage stage = new Stage();
         FXMLLoader fxmlLoader = new FXMLLoader(VistaPrincipal.class.getResource("pantallaJuego.fxml"));
         try {
-            Scene scene = new Scene(fxmlLoader.load(), 1000, 800);
+            Scene scene = new Scene(fxmlLoader.load(), 1200, 800);
             PantallaJuegoController pantallaJuegoController = fxmlLoader.getController();
             pantallaJuegoController.setData(new Mapa());//Creamos el mapa
 
