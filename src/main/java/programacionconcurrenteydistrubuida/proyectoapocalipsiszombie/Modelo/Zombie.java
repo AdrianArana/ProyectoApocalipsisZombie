@@ -1,5 +1,6 @@
 package programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo;
 
+import java.io.Serializable;
 import java.util.Random;
 
 public class Zombie extends Thread {
@@ -13,7 +14,6 @@ public class Zombie extends Thread {
     private String id; //Z____
     Random random = new Random();
     private int kills = 0;
-
 
 
     public void sumarKills() {
@@ -36,9 +36,9 @@ public class Zombie extends Thread {
             try {
                 mapa.verificarPausa();
                 nuevaZona = mapa.cambiarDeZona(nuevaZona, this);
+                dormir(random.nextInt(1000) + 1000);
                 mapa.verificarPausa();
                 mapa.atacar(this, nuevaZona);
-                dormir(random.nextInt(1000));//le hemos bajao pa que ataque frecuentemente todo
             } catch (InterruptedException e) {
                 System.out.println("Excepcion en zombie");
             }
@@ -47,9 +47,9 @@ public class Zombie extends Thread {
 
 
     public void dormir(int milis) {
-        try{
+        try {
             sleep(milis);
-        } catch(InterruptedException e){
+        } catch (InterruptedException e) {
             System.out.println(e.getMessage());
         }
     }

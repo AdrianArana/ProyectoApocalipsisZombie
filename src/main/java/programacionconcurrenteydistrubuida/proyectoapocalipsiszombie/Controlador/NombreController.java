@@ -7,10 +7,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.VistaPrincipal;
+import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo.Mapa;
+import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.VistaServidor;
 
 public class NombreController {////SEGUNDA VENTANA
-
+    private Mapa mapa;
     public TextField textFieldNombre;
     public Button continuarButton;
     public Button VolverButton;
@@ -27,30 +28,30 @@ public class NombreController {////SEGUNDA VENTANA
             Stage stageAnterior = (Stage) continuarButton.getScene().getWindow();
             stageAnterior.close();
             Stage stage = new Stage();
-            FXMLLoader fxmlLoader = new FXMLLoader(VistaPrincipal.class.getResource("ventanaPrincipal.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(VistaServidor.class.getResource("ventanaPrincipal.fxml"));
+
             try {
                 Scene scene = new Scene(fxmlLoader.load(), 800, 650);
                 stage.setTitle("Apocalipsis Zombie de..." + nombreGuardadoString.toUpperCase());
                 stage.setScene(scene);
                 //Aqui creamos el controlador de la ventana de configuracion y le guardamos la Data
                 VentanaPrincipalController ventanaPrincipalController = fxmlLoader.getController();
-                //TODO -> Pasar los datos iniciales del programa desde aquí
                 ventanaPrincipalController.setStage(stage);
                 stage.show();
+                VentanaPrincipalController c = fxmlLoader.getController();
+                c.setMapa(mapa);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
     }
-
 
     public void onVolverButtonClick(ActionEvent actionEvent) {
 
         Stage stageAntiguo = (Stage) VolverButton.getScene().getWindow();
         stageAntiguo.close();
         Stage stage = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader(VistaPrincipal.class.getResource("ventanaInicial.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(VistaServidor.class.getResource("ventanaInicial.fxml"));
         try {
             Scene scene = new Scene(fxmlLoader.load(), 800, 600);
             stage.setTitle("Apocalipsis Zombie");
@@ -62,12 +63,9 @@ public class NombreController {////SEGUNDA VENTANA
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
-
-
-
-
-
-
+    public void setMapa(Mapa mapa) {
+        this.mapa = mapa;
     }
 }

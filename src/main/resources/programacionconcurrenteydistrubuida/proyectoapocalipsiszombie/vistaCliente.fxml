@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="410.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Controlador.VistaClienteController">
+
+    <children>
+      <Label layoutX="97.0" layoutY="49.0" text="Número de humanos dentro del refugio:" />
+      <TextField fx:id="humanosRefugioText" editable="false" layoutX="168.0" layoutY="75.0" prefHeight="25.0" prefWidth="75.0" />
+      <Label layoutX="76.0" layoutY="104.0" text="Número de humanos en cada uno de los túneles:" />
+      <TextField fx:id="humanosTunelesText0" editable="false" layoutX="95.0" layoutY="143.0" prefHeight="25.0" prefWidth="40.0" />
+      <Label layoutX="89.0" layoutY="180.0" text="Número de humanos en cada área insegura:" />
+      <TextField fx:id="humanosAreasInsegurasText0" editable="false" layoutX="95.0" layoutY="218.0" prefHeight="25.0" prefWidth="40.0" />
+      <Label layoutX="93.0" layoutY="252.0" text="Número de zombis en cada área insegura:" />
+      <TextField fx:id="zombisAreasInsegurasText0" editable="false" layoutX="94.0" layoutY="287.0" prefHeight="25.0" prefWidth="40.0" />
+      <Label layoutX="109.0" layoutY="315.0" text="Ranking de los 3 zombis más letales:" />
+      <Button fx:id="ejecucionButton" layoutX="149.0" layoutY="438.0" onAction="#onEjecucionButtonClick" text="Detener/Reanudar" />
+      <TextField fx:id="zombisAreasInsegurasText1" editable="false" layoutX="161.0" layoutY="287.0" prefHeight="25.0" prefWidth="40.0" />
+      <TextField fx:id="zombisAreasInsegurasText2" editable="false" layoutX="227.0" layoutY="287.0" prefHeight="25.0" prefWidth="40.0" />
+      <TextField fx:id="zombisAreasInsegurasText3" editable="false" layoutX="293.0" layoutY="287.0" prefHeight="25.0" prefWidth="40.0" />
+      <TextField fx:id="humanosAreasInsegurasText1" editable="false" layoutX="161.0" layoutY="218.0" prefHeight="25.0" prefWidth="40.0" />
+      <TextField fx:id="humanosAreasInsegurasText2" editable="false" layoutX="227.0" layoutY="218.0" prefHeight="25.0" prefWidth="40.0" />
+      <TextField fx:id="humanosAreasInsegurasText3" editable="false" layoutX="293.0" layoutY="218.0" prefHeight="25.0" prefWidth="40.0" />
+      <TextField fx:id="humanosTunelesText1" editable="false" layoutX="161.0" layoutY="143.0" prefHeight="25.0" prefWidth="40.0" />
+      <TextField fx:id="humanosTunelesText2" editable="false" layoutX="227.0" layoutY="143.0" prefHeight="25.0" prefWidth="40.0" />
+      <TextField fx:id="humanosTunelesText3" editable="false" layoutX="293.0" layoutY="143.0" prefHeight="25.0" prefWidth="40.0" />
+      <Text layoutX="80.0" layoutY="160.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1:" />
+      <Text layoutX="143.0" layoutY="159.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2:" />
+      <Text layoutX="80.0" layoutY="235.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1:" />
+      <Text layoutX="80.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1:" />
+      <Text layoutX="210.0" layoutY="160.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3:" />
+      <Text layoutX="144.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2:" />
+      <Text layoutX="144.0" layoutY="235.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2:" />
+      <Text layoutX="275.0" layoutY="160.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4:" />
+      <Text layoutX="210.0" layoutY="303.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3:" />
+      <Text layoutX="210.0" layoutY="234.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3:" />
+      <Text layoutX="274.0" layoutY="304.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4:" />
+      <Text layoutX="275.0" layoutY="235.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4:" />
+      <Text layoutX="31.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ESTADÍSTICAS - CLIENTE DE LA PARTIDA">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font>
+      </Text>
+      <TextArea fx:id="rankingZombisText" layoutX="129.0" layoutY="349.0" prefHeight="65.0" prefWidth="150.0" wrapText="true" />
+    </children>
+</AnchorPane>

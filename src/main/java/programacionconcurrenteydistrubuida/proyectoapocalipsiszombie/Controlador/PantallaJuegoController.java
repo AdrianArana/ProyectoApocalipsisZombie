@@ -1,28 +1,25 @@
 package programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Controlador;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo.Humano;
 import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo.Mapa;
 import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo.Zombie;
-import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.VistaPrincipal;
+import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.VistaServidor;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 import static java.lang.Thread.sleep;
 
 public class PantallaJuegoController {
     public Button finalizarButton;
-    public TextField txtNoHumanos;
-    public TextField txtMejorZombie;
-    public TextField txtNoZombies;
-    public TextField txtMayorCantidadKills;
     public TextField txtTiempo;
     private Mapa mapa;
     public Button botonPausar;
@@ -58,6 +55,7 @@ public class PantallaJuegoController {
 
     public void setData(Mapa mapa) {
         this.mapa = mapa;
+        txtTiempo.setText("0");
         mapa.setPausado(false);
         botonPausar.setDisable(true);
     }
@@ -79,8 +77,9 @@ public class PantallaJuegoController {
             Zombie z = new Zombie("Z0000", mapa, 0);
             z.start();
             new Thread(() -> {
-                for (int i = 1; i < 40; i++) {
-                    mapa.sumarNumeroHumanos(1);
+                mapa.setIniciado(true);
+                for (int i = 1; i < 100; i++) {
+                    mapa.verificarPausa();
                     Humano h = new Humano(mapa, String.format("H%04d", i));
                     h.start();
                     try {
@@ -90,31 +89,50 @@ public class PantallaJuegoController {
                     }
                 }
             }).start();
-            new Thread(() -> {
-                int dost = 0;
+            Thread actualizarGraficos = new Thread(() -> {
                 while (true) {
                     try {
-                        mapa.verificarPausa();
+                        Platform.runLater(() -> {
+                            try {
+                                mapa.verificarPausa();
 
-                        sleep(500); // Intervalo de 0.5 segundos entre ejecuciones
-                        //sleep(1000);
-                        dost++;
-                        txtTiempo.setText(""+((int)(dost/2)));
-                        //txtTiempo.setText(""+dost);
+                                // Actualizar el tiempo
+                                txtTiempo.setText("" + (Integer.parseInt(txtTiempo.getText()) + 1));
 
-                        recorrerZonaRefugio();
-                        recorrerZonaRiesgo();
-                        recorrerZonaTuneles();
-                        txtNoZombies.setText("" + (mapa.getNumeroKills() + 1));
-                        txtNoHumanos.setText("" + mapa.getNumeroHumanos());
-                        txtMejorZombie.setText(mapa.getMejorZombie());
-                        txtMayorCantidadKills.setText("" + mapa.getMayoresKills());
-                    } catch (InterruptedException e) {
+                                // Actualizar las zonas
+                                recorrerZonaRefugio();
+                                recorrerZonaRiesgo();
+                                recorrerZonaTuneles();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
                         e.printStackTrace();
-                        break; // Salir del bucle si el hilo es interrumpido
                     }
                 }
-            }).start();
+            });
+            actualizarGraficos.start();
+            /*
+            ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+
+            scheduler.scheduleAtFixedRate(() -> {
+                try {
+                    mapa.verificarPausa();
+
+                    // Actualizar el tiempo
+                    txtTiempo.setText("" + (Integer.parseInt(txtTiempo.getText()) + 1));
+
+                    // Actualizar las zonas
+                    recorrerZonaRefugio();
+                    recorrerZonaRiesgo();
+                    recorrerZonaTuneles();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    scheduler.shutdown();
+                }
+            }, 0, 1, TimeUnit.SECONDS);*/
         } else {
             mapa.reanudarHilos();
         }
@@ -127,20 +145,32 @@ public class PantallaJuegoController {
         ArrayList<String> listaIDesZonaComun = new ArrayList<>();
 
         if (!mapa.getZonaRefugio().getZonaDescanso().isEmpty()) {
-            for (Humano humano : mapa.getZonaRefugio().getZonaDescanso()) {
-                listaIDesDescanso.add(humano.getIde());
+            try {
+                for (Humano humano : mapa.getZonaRefugio().getZonaDescanso()) {
+                    listaIDesDescanso.add(humano.getIde());
+                }
+            } catch (NullPointerException e) {
+            } catch (ConcurrentModificationException ex) {
             }
         }
         if (!mapa.getZonaRefugio().getZonaComedor().isEmpty()) {
-            for (Humano humano : mapa.getZonaRefugio().getZonaComedor()) {
-                listaIDesComedor.add(humano.getIde());
+            try {
+                for (Humano humano : mapa.getZonaRefugio().getZonaComedor()) {
+                    listaIDesComedor.add(humano.getIde());
+                }
+            } catch (NullPointerException e) {
+            } catch (ConcurrentModificationException ex) {
             }
         }
         if (!mapa.getZonaRefugio().getZonaComun().isEmpty()) {
-            for (Humano humano : mapa.getZonaRefugio().getZonaComun()) {
-                assert humano != null;
-                listaIDesZonaComun.add(humano.getIde());
+            try {
+                for (Humano humano : mapa.getZonaRefugio().getZonaComun()) {
+                    listaIDesZonaComun.add(humano.getIde());
+                }
+            } catch (NullPointerException e) {
+            } catch (ConcurrentModificationException ex) {
             }
+
         }
         txtComida.setText("" + mapa.getZonaRefugio().getAlmacen_comida());
         txtDescanso.setText(listaIDesDescanso.toString());
@@ -160,23 +190,50 @@ public class PantallaJuegoController {
         ArrayList<String> listaIDesTunel2 = new ArrayList<>();
         ArrayList<String> listaIDesTunel3 = new ArrayList<>();
 
-        if (!mapa.getZonaTuneles().getZonasEspera()[0].isEmpty()) {
-            for (Humano humano : mapa.getZonaTuneles().getZonasEspera()[0]) {
+        ArrayList<String> listaGruposVuelta0 = new ArrayList<>();
+        ArrayList<String> listaGruposVuelta1 = new ArrayList<>();
+        ArrayList<String> listaGruposVuelta2 = new ArrayList<>();
+        ArrayList<String> listaGruposVuelta3 = new ArrayList<>();
+
+        if (!mapa.getZonaTuneles().getZonasEsperaVuelta()[0].isEmpty()) {
+            for (Humano humano : mapa.getZonaTuneles().getZonasEsperaIda()[0]) {
+                listaGruposVuelta0.add(humano.getIde());
+            }
+        }
+        if (!mapa.getZonaTuneles().getZonasEsperaVuelta()[1].isEmpty()) {
+            for (Humano humano : mapa.getZonaTuneles().getZonasEsperaIda()[1]) {
+                listaGruposVuelta1.add(humano.getIde());
+            }
+        }
+        if (!mapa.getZonaTuneles().getZonasEsperaVuelta()[2].isEmpty()) {
+            for (Humano humano : mapa.getZonaTuneles().getZonasEsperaIda()[2]) {
+                listaGruposVuelta2.add(humano.getIde());
+            }
+        }
+        if (!mapa.getZonaTuneles().getZonasEsperaVuelta()[3].isEmpty()) {
+            for (Humano humano : mapa.getZonaTuneles().getZonasEsperaIda()[3]) {
+                listaGruposVuelta3.add(humano.getIde());
+            }
+        }
+
+
+        if (!mapa.getZonaTuneles().getZonasEsperaIda()[0].isEmpty()) {
+            for (Humano humano : mapa.getZonaTuneles().getZonasEsperaIda()[0]) {
                 listaGrupos0.add(humano.getIde());
             }
         }
-        if (!mapa.getZonaTuneles().getZonasEspera()[1].isEmpty()) {
-            for (Humano humano : mapa.getZonaTuneles().getZonasEspera()[1]) {
+        if (!mapa.getZonaTuneles().getZonasEsperaIda()[1].isEmpty()) {
+            for (Humano humano : mapa.getZonaTuneles().getZonasEsperaIda()[1]) {
                 listaGrupos1.add(humano.getIde());
             }
         }
-        if (!mapa.getZonaTuneles().getZonasEspera()[2].isEmpty()) {
-            for (Humano humano : mapa.getZonaTuneles().getZonasEspera()[2]) {
+        if (!mapa.getZonaTuneles().getZonasEsperaIda()[2].isEmpty()) {
+            for (Humano humano : mapa.getZonaTuneles().getZonasEsperaIda()[2]) {
                 listaGrupos2.add(humano.getIde());
             }
         }
-        if (!mapa.getZonaTuneles().getZonasEspera()[3].isEmpty()) {
-            for (Humano humano : mapa.getZonaTuneles().getZonasEspera()[3]) {
+        if (!mapa.getZonaTuneles().getZonasEsperaIda()[3].isEmpty()) {
+            for (Humano humano : mapa.getZonaTuneles().getZonasEsperaIda()[3]) {
                 listaGrupos3.add(humano.getIde());
             }
         }
@@ -213,6 +270,12 @@ public class PantallaJuegoController {
         textTunel02.setText(listaGrupos1.toString());
         textTunel03.setText(listaGrupos2.toString());
         textTunel04.setText(listaGrupos3.toString());
+
+        textTunel21.setText(listaGruposVuelta0.toString());
+        textTunel22.setText(listaGruposVuelta1.toString());
+        textTunel23.setText(listaGruposVuelta2.toString());
+        textTunel24.setText(listaGruposVuelta3.toString());
+
     }
 
     private synchronized void recorrerZonaRiesgo() {
@@ -226,7 +289,7 @@ public class PantallaJuegoController {
         ArrayList<String> listaIDZRiesgo3 = new ArrayList<>();
         if (!mapa.getZonaRiesgo().getZonas()[0].isEmpty()) {
             for (Thread thread : mapa.getZonaRiesgo().getZonas()[0]) {
-                if (thread.getClass() == Humano.class) {
+                if (thread instanceof Humano) {
                     listaIDHRiesgo0.add(((Humano) thread).getIde());
                 } else {
                     listaIDZRiesgo0.add(((Zombie) thread).getIde());
@@ -235,7 +298,7 @@ public class PantallaJuegoController {
         }
         if (!mapa.getZonaRiesgo().getZonas()[1].isEmpty()) {
             for (Thread thread : mapa.getZonaRiesgo().getZonas()[1]) {
-                if (thread.getClass() == Humano.class) {
+                if (thread instanceof Humano) {
                     listaIDHRiesgo1.add(((Humano) thread).getIde());
                 } else {
                     listaIDZRiesgo1.add(((Zombie) thread).getIde());
@@ -244,7 +307,7 @@ public class PantallaJuegoController {
         }
         if (!mapa.getZonaRiesgo().getZonas()[2].isEmpty()) {
             for (Thread thread : mapa.getZonaRiesgo().getZonas()[2]) {
-                if (thread.getClass() == Humano.class) {
+                if (thread instanceof Humano) {
                     listaIDHRiesgo2.add(((Humano) thread).getIde());
                 } else {
                     listaIDZRiesgo2.add(((Zombie) thread).getIde());
@@ -254,7 +317,7 @@ public class PantallaJuegoController {
         if (!mapa.getZonaRiesgo().getZonas()[3].isEmpty()) {
             for (Thread thread : mapa.getZonaRiesgo().getZonas()[3]) {
 
-                if (thread.getClass() == Humano.class) {
+                if (thread instanceof Humano) {
                     listaIDHRiesgo3.add(((Humano) thread).getIde());
                 } else {
                     listaIDZRiesgo3.add(((Zombie) thread).getIde());
@@ -273,7 +336,7 @@ public class PantallaJuegoController {
 
 
     public void pararTodo() {
-        System.exit(0);        //todo
+        System.exit(0);
     }
 
     public void onFinalizarButton(ActionEvent actionEvent) {
@@ -284,7 +347,7 @@ public class PantallaJuegoController {
         Stage stageAntiguo = (Stage) finalizarButton.getScene().getWindow();
         stageAntiguo.close();
         Stage stage = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader(VistaPrincipal.class.getResource("finJuego.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(VistaServidor.class.getResource("finJuego.fxml"));
         try {
             Scene scene = new Scene(fxmlLoader.load(), 800, 600);
             stage.setTitle("Apocalipsis Zombie ACABADO");

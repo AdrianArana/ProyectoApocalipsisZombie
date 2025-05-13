@@ -81,7 +81,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                programacionconcurrenteydistrubuida.proyectoapocalipsiszombie/programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.VistaPrincipal
+                                programacionconcurrenteydistrubuida.proyectoapocalipsiszombie/programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.VistaServidor
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
