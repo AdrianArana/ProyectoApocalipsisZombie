@@ -8,33 +8,21 @@ public class ZonaRefugio {
     ArrayList<Humano> zonaComun;
 
     public ZonaRefugio() {
-        this.zonaDescanso = new ArrayList<Humano>();
-        this.zonaComedor = new ArrayList<Humano>();
-        this.zonaComun = new ArrayList<Humano>();
+        this.zonaDescanso = new ArrayList<>();
+        this.zonaComedor = new ArrayList<>();
+        this.zonaComun = new ArrayList<>();
     }
 
     public ArrayList<Humano> getZonaDescanso() {
         return zonaDescanso;
     }
 
-    public void setZonaDescanso(ArrayList<Humano> zonaDescanso) {
-        this.zonaDescanso = zonaDescanso;
-    }
-
     public ArrayList<Humano> getZonaComedor() {
         return zonaComedor;
     }
 
-    public void setZonaComedor(ArrayList<Humano> zonaComedor) {
-        this.zonaComedor = zonaComedor;
-    }
-
     public ArrayList<Humano> getZonaComun() {
         return zonaComun;
-    }
-
-    public void setZonaComun(ArrayList<Humano> zonaComun) {
-        this.zonaComun = zonaComun;
     }
 
     private int almacen_comida = 0;
@@ -57,6 +45,5 @@ public class ZonaRefugio {
         total += zonaComedor.size();
         total += zonaComun.size();
         return total;
-
     }
 }

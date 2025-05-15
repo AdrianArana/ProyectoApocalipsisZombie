@@ -17,11 +17,9 @@ public class NombreController {
     public Button VolverButton;
     public Label labelError;
 
-    private String nombreGuardadoString;
-
     public void onSiguienteButtonClick(ActionEvent actionEvent) {
-        nombreGuardadoString = (textFieldNombre.getText());
-        if (nombreGuardadoString.equals("")) {
+        String nombreGuardadoString = (textFieldNombre.getText());
+        if (nombreGuardadoString.isEmpty()) {
             labelError.setText("El nombre no puede ser vacío");
         } else {
             System.out.println("Nombre Guardado: " + nombreGuardadoString);
@@ -35,18 +33,18 @@ public class NombreController {
                 stage.setTitle("Apocalipsis Zombie de..." + nombreGuardadoString.toUpperCase());
                 stage.setScene(scene);
                 //Aqui creamos el controlador de la ventana de configuracion y le guardamos la Data
-                VentanaPrincipalController ventanaPrincipalController = fxmlLoader.getController();
-                ventanaPrincipalController.setStage(stage);
                 stage.show();
                 VentanaPrincipalController c = fxmlLoader.getController();
                 c.setMapa(mapa);
+                c.setNombre(nombreGuardadoString.toUpperCase());
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("Error en la función onSiguienteButtonClick:\n" + e.getMessage());
+
             }
         }
     }
 
-    public void onVolverButtonClick(ActionEvent actionEvent) {
+    public void onVolverButtonClick() {
 
         Stage stageAntiguo = (Stage) VolverButton.getScene().getWindow();
         stageAntiguo.close();
@@ -61,7 +59,7 @@ public class NombreController {
             stage.show();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Error en la función onVolverButtonClick:\n" + e.getMessage());
         }
     }
 

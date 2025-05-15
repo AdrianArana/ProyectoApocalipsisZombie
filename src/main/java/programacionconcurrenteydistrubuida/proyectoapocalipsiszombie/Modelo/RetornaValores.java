@@ -7,16 +7,12 @@ import java.util.List;
 
 
 public class RetornaValores extends UnicastRemoteObject implements RMIInterfaz {
-    private Mapa mapa;
+    private final Mapa mapa;
 
     public RetornaValores(Mapa mapa) throws RemoteException {
         super();
         this.mapa = mapa;
 
-    }
-    @Override
-    public void finalizar(){
-        mapa.finalizar();
     }
 
     @Override

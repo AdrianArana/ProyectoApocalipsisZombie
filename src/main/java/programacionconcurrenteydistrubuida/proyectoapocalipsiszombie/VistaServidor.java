@@ -34,7 +34,7 @@ public class VistaServidor extends Application {
             RetornaValores mapaSimulacion = new RetornaValores(mapa) {
             };
             Registry registry = LocateRegistry.createRegistry(1099);
-            Naming.rebind("//127.0.0.1/ObjetoRetornaValores", mapaSimulacion);
+            Naming.rebind("//localHost/ObjetoRetornaValores", mapaSimulacion);
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
             e.printStackTrace();

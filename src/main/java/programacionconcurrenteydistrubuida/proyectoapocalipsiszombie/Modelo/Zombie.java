@@ -1,17 +1,16 @@
 package programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo;
 
-import java.io.Serializable;
 import java.util.Random;
 
 public class Zombie extends Thread {
     private final int zonaInicial;
-    private Mapa mapa;
+    private final Mapa mapa;
 
     public String getIde() {
         return id;
     }
 
-    private String id; //Z____
+    private final String id; //Z____
     Random random = new Random();
     private int kills = 0;
 
@@ -31,18 +30,17 @@ public class Zombie extends Thread {
     public void run() {
         mapa.zonaRiesgo.zonas[zonaInicial].add(this);
         int nuevaZona = zonaInicial;
-        while (true) {
+        while (!isInterrupted()) {
             try {
                 mapa.verificarPausa();
                 nuevaZona = mapa.cambiarDeZona(nuevaZona, this);
                 dormir(random.nextInt(1000) + 1000);
                 mapa.verificarPausa();
-                mapa.atacar(this, nuevaZona);                dormir(random.nextInt(1000) + 2000);
-
-
-
+                mapa.atacar(this, nuevaZona);
+                dormir(random.nextInt(1000) + 2000);
             } catch (InterruptedException e) {
-                System.out.println("Excepcion en zombie");
+                System.out.println("Excepcion en zombie:\n" + e.getMessage());
+                interrupt();// Pa salir
             }
         }
     }

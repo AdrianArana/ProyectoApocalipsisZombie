@@ -28,7 +28,7 @@ public class VentanaInicialController {
             c.setMapa(mapa);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Error en el boton que inicia la ventana nombre\n" + e.getMessage());
         }
 
     }
@@ -36,7 +36,7 @@ public class VentanaInicialController {
     public void setMapa(Mapa mapa) {
         this.mapa = mapa;
     }
-    public void onCreditosButtonClick(ActionEvent actionEvent) {
+    public void onCreditosButtonClick() {
         Stage stage = new Stage();
         FXMLLoader fxmlLoader = new FXMLLoader(VistaServidor.class.getResource("creditos.fxml"));
         try {
@@ -48,7 +48,7 @@ public class VentanaInicialController {
             stage.show();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Error en el boton de creditos en la primera ventana del servidor\n" + e.getMessage());
         }
 
     }

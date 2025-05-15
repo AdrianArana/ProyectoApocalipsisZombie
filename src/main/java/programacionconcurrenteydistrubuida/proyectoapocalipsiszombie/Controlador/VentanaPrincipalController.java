@@ -11,11 +11,8 @@ public class VentanaPrincipalController {
     private Mapa mapa;
     public Button botonIniciar;
 
-    private Stage escenaPrincipal;
+    private String nombre;
 
-    public void setStage(Stage stage) {
-        this.escenaPrincipal = stage;
-    }
 
     public void setMapa(Mapa mapa) {
         this.mapa = mapa;
@@ -27,17 +24,19 @@ public class VentanaPrincipalController {
         FXMLLoader fxmlLoader = new FXMLLoader(VistaServidor.class.getResource("pantallaJuego.fxml"));
         try {
             Scene scene = new Scene(fxmlLoader.load(), 1200, 800);
-            PantallaJuegoController pantallaJuegoController = fxmlLoader.getController();
-
-            stage.setTitle("Pantalla Juego de Apocalipsis Zombie");
+            stage.setTitle("Apocalipsis Zombie de "+nombre);
             stage.setScene(scene);
             stage.show();
             PantallaJuegoController c = fxmlLoader.getController();
             c.setData(mapa);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Error en el boton que inicia la pantalla juego\n" + e.getMessage());
         }
 
 
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 }

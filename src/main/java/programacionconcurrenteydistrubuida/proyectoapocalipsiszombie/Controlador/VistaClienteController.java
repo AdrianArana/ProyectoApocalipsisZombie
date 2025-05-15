@@ -1,15 +1,12 @@
 package programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Controlador;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo.RMIInterfaz;
-import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo.Zombie;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 
 public class VistaClienteController {
     public TextField humanosTunelesText0;
@@ -70,22 +67,18 @@ public class VistaClienteController {
                             humanosAreasInsegurasText1.setText(String.valueOf(retornaValores.getNumeroHumanosZonaRiesgo(1)));
                             humanosAreasInsegurasText2.setText(String.valueOf(retornaValores.getNumeroHumanosZonaRiesgo(2)));
                             humanosAreasInsegurasText3.setText(String.valueOf(retornaValores.getNumeroHumanosZonaRiesgo(3)));
-                            
-                            
-                            
-                            
 
                             humanosRefugioText.setText(String.valueOf(retornaValores.getNumeroHumanosRefugio()));
 
                             rankingZombisText.setText(retornaValores.getMejoresZombies());
 
                         } catch (RemoteException e) {
-                            e.printStackTrace();
+                            System.out.println("Error en la actualizacion de valores\n" + e.getMessage());
                         }
                     });
-                    Thread.sleep(1000);
+                    Thread.sleep(200);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    System.out.println("Error en la actualizacion de valores\n" + e.getMessage());
                 }
             }
         });
@@ -93,7 +86,7 @@ public class VistaClienteController {
 
     }
 
-    public void onEjecucionButtonClick(ActionEvent actionEvent) throws RemoteException {
+    public void onEjecucionButtonClick() throws RemoteException {
         parado = !parado; //Alternamos entre valores
         retornaValores.setParado(parado);
     }

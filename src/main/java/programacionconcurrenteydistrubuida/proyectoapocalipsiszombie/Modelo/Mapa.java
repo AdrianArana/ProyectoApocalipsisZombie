@@ -342,11 +342,4 @@ public class Mapa  {
     public void setIniciado(boolean b) {
         this.iniciado = b;
     }
-
-    public void finalizar() {
-        logger.info("Finalizando todos los hilos");
-
-        System.exit(0);
-    }
-
 }

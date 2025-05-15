@@ -22,7 +22,7 @@ public class VistaCliente extends Application {
         stage.show();
         try {
             // Localiza el objeto distribuido
-            RMIInterfaz mapa = (RMIInterfaz) Naming.lookup("//127.0.0.1/ObjetoRetornaValores");
+            RMIInterfaz mapa = (RMIInterfaz) Naming.lookup("//localHost/ObjetoRetornaValores");
             VistaClienteController c = fxmlLoader.getController();
             c.setRetornaValores(mapa);
             c.iniciarActualizacionDeValores();

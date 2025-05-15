@@ -22,20 +22,20 @@ public class ZonaTuneles {
 
     public ZonaTuneles() {
         zonasEsperaIda = new ArrayList[4];
-        zonasEsperaIda[0] = new ArrayList<Humano>();
-        zonasEsperaIda[1] = new ArrayList<Humano>();
-        zonasEsperaIda[2] = new ArrayList<Humano>();
-        zonasEsperaIda[3] = new ArrayList<Humano>();
+        zonasEsperaIda[0] = new ArrayList<>();
+        zonasEsperaIda[1] = new ArrayList<>();
+        zonasEsperaIda[2] = new ArrayList<>();
+        zonasEsperaIda[3] = new ArrayList<>();
         zonasEsperaVuelta = new ArrayList[4];
-        zonasEsperaVuelta[0] = new ArrayList<Humano>();
-        zonasEsperaVuelta[1] = new ArrayList<Humano>();
-        zonasEsperaVuelta[2] = new ArrayList<Humano>();
-        zonasEsperaVuelta[3] = new ArrayList<Humano>();
+        zonasEsperaVuelta[0] = new ArrayList<>();
+        zonasEsperaVuelta[1] = new ArrayList<>();
+        zonasEsperaVuelta[2] = new ArrayList<>();
+        zonasEsperaVuelta[3] = new ArrayList<>();
         tuneles = new ArrayList[4];
-        tuneles[0] = new ArrayList<Humano>();
-        tuneles[1] = new ArrayList<Humano>();
-        tuneles[2] = new ArrayList<Humano>();
-        tuneles[3] = new ArrayList<Humano>();
+        tuneles[0] = new ArrayList<>();
+        tuneles[1] = new ArrayList<>();
+        tuneles[2] = new ArrayList<>();
+        tuneles[3] = new ArrayList<>();
     }
 }
 
