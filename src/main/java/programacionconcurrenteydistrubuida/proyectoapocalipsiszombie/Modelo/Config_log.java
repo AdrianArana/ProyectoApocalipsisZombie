@@ -2,6 +2,8 @@ package programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo;
 
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,7 +17,10 @@ public class Config_log {
 
     private static void configurarLogger(){
         try{
-            FileHandler archivoLog= new FileHandler("registro.txt", true);
+            String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String nombreArchivo = "registro_" + timestamp + ".txt";
+
+            FileHandler archivoLog = new FileHandler(nombreArchivo, false);
             archivoLog.setFormatter(new SimpleFormatter());
             archivoLog.setLevel(Level.ALL);
 

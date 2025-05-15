@@ -14,7 +14,20 @@ public class RetornaValores extends UnicastRemoteObject implements RMIInterfaz {
         this.mapa = mapa;
 
     }
+    @Override
+    public void finalizar(){
+        mapa.finalizar();
+    }
 
+    @Override
+    public int getNumeroHumanosEsperaIda(int i) throws RemoteException {
+        return mapa.getZonaTuneles().getZonasEsperaIda()[i].size();
+    }
+
+    @Override
+    public int getNumeroHumanosEsperaVuelta(int i) throws RemoteException {
+        return mapa.getZonaTuneles().getZonasEsperaVuelta()[i].size();
+    }
 
     @Override
     public boolean getIniciado() throws RemoteException {

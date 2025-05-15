@@ -4,7 +4,7 @@ import java.util.Random;
 import java.util.concurrent.BrokenBarrierException;
 
 public class Humano extends Thread {
-    private final String id;
+    private String id;
     private int comida;//H____
     Mapa mapa;
     private boolean marcado;

@@ -24,6 +24,14 @@ public class VistaClienteController {
     public TextField humanosTunelesText1;
     public TextField humanosTunelesText2;
     public TextField humanosTunelesText3;
+    public TextField humanosTunelesText01;
+    public TextField humanosTunelesText21;
+    public TextField humanosTunelesText11;
+    public TextField humanosTunelesText31;
+    public TextField humanosTunelesText02;
+    public TextField humanosTunelesText12;
+    public TextField humanosTunelesText22;
+    public TextField humanosTunelesText32;
     private boolean parado = false;
     public TextField humanosRefugioText;
     public TextArea rankingZombisText;
@@ -37,10 +45,21 @@ public class VistaClienteController {
                 try {
                     Platform.runLater(() -> {
                         try {
+
+                            humanosTunelesText01.setText(String.valueOf(retornaValores.getNumeroHumanosEsperaIda(0)));
+                            humanosTunelesText11.setText(String.valueOf(retornaValores.getNumeroHumanosEsperaIda(1)));
+                            humanosTunelesText21.setText(String.valueOf(retornaValores.getNumeroHumanosEsperaIda(2)));
+                            humanosTunelesText31.setText(String.valueOf(retornaValores.getNumeroHumanosEsperaIda(3)));
+
                             humanosTunelesText0.setText(String.valueOf(retornaValores.getNumeroHumanosTunel(0)));
                             humanosTunelesText1.setText(String.valueOf(retornaValores.getNumeroHumanosTunel(1)));
                             humanosTunelesText2.setText(String.valueOf(retornaValores.getNumeroHumanosTunel(2)));
                             humanosTunelesText3.setText(String.valueOf(retornaValores.getNumeroHumanosTunel(3)));
+
+                            humanosTunelesText02.setText(String.valueOf(retornaValores.getNumeroHumanosEsperaVuelta(0)));
+                            humanosTunelesText12.setText(String.valueOf(retornaValores.getNumeroHumanosEsperaVuelta(1)));
+                            humanosTunelesText22.setText(String.valueOf(retornaValores.getNumeroHumanosEsperaVuelta(2)));
+                            humanosTunelesText32.setText(String.valueOf(retornaValores.getNumeroHumanosEsperaVuelta(3)));
 
                             zombisAreasInsegurasText0.setText(String.valueOf(retornaValores.getNumeroZombiesZonaRiesgo(0)));
                             zombisAreasInsegurasText1.setText(String.valueOf(retornaValores.getNumeroZombiesZonaRiesgo(1)));
@@ -51,6 +70,10 @@ public class VistaClienteController {
                             humanosAreasInsegurasText1.setText(String.valueOf(retornaValores.getNumeroHumanosZonaRiesgo(1)));
                             humanosAreasInsegurasText2.setText(String.valueOf(retornaValores.getNumeroHumanosZonaRiesgo(2)));
                             humanosAreasInsegurasText3.setText(String.valueOf(retornaValores.getNumeroHumanosZonaRiesgo(3)));
+                            
+                            
+                            
+                            
 
                             humanosRefugioText.setText(String.valueOf(retornaValores.getNumeroHumanosRefugio()));
 
@@ -77,5 +100,11 @@ public class VistaClienteController {
 
     public void setRetornaValores(RMIInterfaz mapa) {
         this.retornaValores = mapa;
+    }
+
+    public void onFinalizarButton(ActionEvent actionEvent) throws RemoteException {
+        retornaValores.finalizar();
+        System.exit(0);
+        //todo
     }
 }

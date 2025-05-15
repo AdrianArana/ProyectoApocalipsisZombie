@@ -22,7 +22,6 @@ public class PantallaJuegoController {
     public Button finalizarButton;
     public TextField txtTiempo;
     private Mapa mapa;
-    public Button botonPausar;
     public Button botonReanudar;
     public TextArea txtDescanso;
     public TextArea txtComedor;
@@ -51,69 +50,56 @@ public class PantallaJuegoController {
 
 
     // Bandera para pausar el juego
-    private boolean empezado = false;
-
     public void setData(Mapa mapa) {
         this.mapa = mapa;
         txtTiempo.setText("0");
         mapa.setPausado(false);
-        botonPausar.setDisable(true);
-    }
-
-    public void onBotonPausar(ActionEvent mouseEvent) {
-        botonReanudar.setDisable(false);
-        botonPausar.setDisable(true);
-        mapa.pausarHilos();
     }
 
 
     public void onBotonReanudar(ActionEvent actionEvent) throws InterruptedException {
         botonReanudar.setDisable(true);
-        botonReanudar.setText("Reanudar");
-        botonPausar.setDisable(false);
-
-        if (!empezado) {
-            empezado = true;
-            Zombie z = new Zombie("Z0000", mapa, 0);
-            z.start();
-            new Thread(() -> {
-                mapa.setIniciado(true);
-                for (int i = 1; i < 100; i++) {
-                    mapa.verificarPausa();
-                    Humano h = new Humano(mapa, String.format("H%04d", i));
-                    h.start();
-                    try {
-                        sleep(500);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
+        botonReanudar.setText("");
+        Zombie z = new Zombie("Z0000", mapa, 0);
+        z.start();
+        new Thread(() -> {
+            mapa.setIniciado(true);
+            for (int i = 1; i < 10000; i++) {
+                mapa.verificarPausa();
+                Humano h = new Humano(mapa, String.format("H%04d", i));
+                h.start();
+                try {
+                    sleep(200);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
-            }).start();
-            Thread actualizarGraficos = new Thread(() -> {
-                while (true) {
-                    try {
-                        Platform.runLater(() -> {
-                            try {
-                                mapa.verificarPausa();
+            }
+        }).start();
+        Thread actualizarGraficos = new Thread(() -> {
+            while (true) {
+                try {
+                    Platform.runLater(() -> {
+                        try {
+                            mapa.verificarPausa();
 
-                                // Actualizar el tiempo
-                                txtTiempo.setText("" + (Integer.parseInt(txtTiempo.getText()) + 1));
+                            // Actualizar el tiempo
+                            txtTiempo.setText("" + (Integer.parseInt(txtTiempo.getText()) + 1));
 
-                                // Actualizar las zonas
-                                recorrerZonaRefugio();
-                                recorrerZonaRiesgo();
-                                recorrerZonaTuneles();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        });
-                        Thread.sleep(1000);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                            // Actualizar las zonas
+                            recorrerZonaRefugio();
+                            recorrerZonaRiesgo();
+                            recorrerZonaTuneles();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+                    Thread.sleep(100);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
-            actualizarGraficos.start();
+            }
+        });
+        actualizarGraficos.start();
             /*
             ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
@@ -133,9 +119,7 @@ public class PantallaJuegoController {
                     scheduler.shutdown();
                 }
             }, 0, 1, TimeUnit.SECONDS);*/
-        } else {
-            mapa.reanudarHilos();
-        }
+
     }
 
 
@@ -196,22 +180,22 @@ public class PantallaJuegoController {
         ArrayList<String> listaGruposVuelta3 = new ArrayList<>();
 
         if (!mapa.getZonaTuneles().getZonasEsperaVuelta()[0].isEmpty()) {
-            for (Humano humano : mapa.getZonaTuneles().getZonasEsperaIda()[0]) {
+            for (Humano humano : mapa.getZonaTuneles().getZonasEsperaVuelta()[0]) {
                 listaGruposVuelta0.add(humano.getIde());
             }
         }
         if (!mapa.getZonaTuneles().getZonasEsperaVuelta()[1].isEmpty()) {
-            for (Humano humano : mapa.getZonaTuneles().getZonasEsperaIda()[1]) {
+            for (Humano humano : mapa.getZonaTuneles().getZonasEsperaVuelta()[1]) {
                 listaGruposVuelta1.add(humano.getIde());
             }
         }
         if (!mapa.getZonaTuneles().getZonasEsperaVuelta()[2].isEmpty()) {
-            for (Humano humano : mapa.getZonaTuneles().getZonasEsperaIda()[2]) {
+            for (Humano humano : mapa.getZonaTuneles().getZonasEsperaVuelta()[2]) {
                 listaGruposVuelta2.add(humano.getIde());
             }
         }
         if (!mapa.getZonaTuneles().getZonasEsperaVuelta()[3].isEmpty()) {
-            for (Humano humano : mapa.getZonaTuneles().getZonasEsperaIda()[3]) {
+            for (Humano humano : mapa.getZonaTuneles().getZonasEsperaVuelta()[3]) {
                 listaGruposVuelta3.add(humano.getIde());
             }
         }
@@ -315,13 +299,16 @@ public class PantallaJuegoController {
             }
         }
         if (!mapa.getZonaRiesgo().getZonas()[3].isEmpty()) {
-            for (Thread thread : mapa.getZonaRiesgo().getZonas()[3]) {
+            try {
+                for (Thread thread : mapa.getZonaRiesgo().getZonas()[3]) {
 
-                if (thread instanceof Humano) {
-                    listaIDHRiesgo3.add(((Humano) thread).getIde());
-                } else {
-                    listaIDZRiesgo3.add(((Zombie) thread).getIde());
+                    if (thread instanceof Humano) {
+                        listaIDHRiesgo3.add(((Humano) thread).getIde());
+                    } else {
+                        listaIDZRiesgo3.add(((Zombie) thread).getIde());
+                    }
                 }
+            } catch (Exception e) {
             }
         }
         textRiesgo01.setText(listaIDHRiesgo0.toString());

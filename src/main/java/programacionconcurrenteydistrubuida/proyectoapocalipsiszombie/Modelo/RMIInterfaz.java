@@ -12,4 +12,8 @@ public interface RMIInterfaz extends Remote {
     int getNumeroHumanosZonaRiesgo(int zona) throws RemoteException;
     int getNumeroZombiesZonaRiesgo(int zona) throws RemoteException;
     void setParado(boolean b) throws RemoteException;
+    void finalizar() throws RemoteException;
+    int getNumeroHumanosEsperaIda(int i) throws RemoteException;
+    int getNumeroHumanosEsperaVuelta(int i) throws RemoteException;
+
 }

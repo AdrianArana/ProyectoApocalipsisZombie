@@ -1,5 +1,7 @@
 package programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.BrokenBarrierException;
@@ -10,13 +12,21 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
-
+import java.util.logging.Level;
 import static java.lang.Thread.sleep;
+import java.util.logging.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+
+
 
 public class Mapa  {
     private static final Logger logger = Config_log.getLogger();
     private boolean iniciado = false;
 
+    LocalDateTime ahora = LocalDateTime.now();
+    DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     ZonaRefugio zonaRefugio;
     ZonaRiesgo zonaRiesgo;
@@ -89,12 +99,12 @@ public class Mapa  {
             new Semaphore(1, true), new Semaphore(1, true), new Semaphore(1, true), new Semaphore(1, true)
     };
     private final Semaphore[] puedeEntrarVuelta = {
-            new Semaphore(0, true), new Semaphore(0, true), new Semaphore(0, true), new Semaphore(0, true)
+            new Semaphore(1, true), new Semaphore(1, true), new Semaphore(1, true), new Semaphore(1, true)
     };
-    private final boolean[] tunelOcupadoIda = new boolean[4];
-    private final boolean[] tunelOcupadoVuelta = new boolean[4];
 
-
+    private final Semaphore[] ticketPasarTunel = {
+            new Semaphore(1), new Semaphore(1), new Semaphore(1), new Semaphore(1)
+    };
     public void borrarHumanodelRiesgo(Humano h) {
         for (int i = 0; i < 4; i++) {
             zonaRiesgo.zonas[i].remove(h);
@@ -105,17 +115,31 @@ public class Mapa  {
     public void pasarTunelIda(int tunelElegido, Humano humano) throws BrokenBarrierException, InterruptedException {
         // Esperar a que haya 3 humanos para formar grupo
         cb_tuneles[tunelElegido].await();
+
+        lockZonaDescanso.lock();
         zonaRefugio.zonaComun.remove(humano);
+        lockZonaDescanso.unlock();
+
         zonaTuneles.zonasEsperaIda[tunelElegido].add(humano);
-        puedeEntrarIda[tunelElegido].acquire();
+        puedeEntrarIda[tunelElegido].acquire();//Se pone a la cola una vez está en la sala de espera
+        ticketPasarTunel[tunelElegido].acquire();
         zonaTuneles.zonasEsperaIda[tunelElegido].remove(humano);
+
         zonaTuneles.tuneles[tunelElegido].add(humano);
         sleep(1000);
         zonaTuneles.tuneles[tunelElegido].remove(humano);
+
         if (quierenVolver[tunelElegido].intValue() > 0) { //Así aseguramos la prioridad de los que vuelven
+
             puedeEntrarVuelta[tunelElegido].release();
+            ticketPasarTunel[tunelElegido].release();
+
         } else {
+
             puedeEntrarIda[tunelElegido].release();
+            ticketPasarTunel[tunelElegido].release();
+            puedeEntrarVuelta[tunelElegido].release();
+
         }
 
     }
@@ -123,22 +147,35 @@ public class Mapa  {
     // Versión optimizada de pasarTunelVuelta
     public void pasarTunelVuelta(int tunelElegido, Humano humano) throws InterruptedException {
         quierenVolver[tunelElegido].incrementAndGet();
+
         locks_tuneles[tunelElegido].lock();
         zonaTuneles.zonasEsperaVuelta[tunelElegido].add(humano);
         locks_tuneles[tunelElegido].unlock();
+
+        lockZonaRiesgo[tunelElegido].lock();
         zonaRiesgo.zonas[tunelElegido].remove(humano);
-        puedeEntrarVuelta[tunelElegido].acquire();
-        locks_tuneles[tunelElegido].lock();
+        lockZonaRiesgo[tunelElegido].unlock();
+
+        puedeEntrarVuelta[tunelElegido].acquire();//Una vez hecho el acquire aseguramos exclusion mutua
+        ticketPasarTunel[tunelElegido].acquire();
         zonaTuneles.zonasEsperaVuelta[tunelElegido].remove(humano);
-        locks_tuneles[tunelElegido].unlock();
+
         zonaTuneles.tuneles[tunelElegido].add(humano);
         sleep(1000);
         zonaTuneles.tuneles[tunelElegido].remove(humano);
+
         quierenVolver[tunelElegido].decrementAndGet();
-        if (quierenVolver[tunelElegido].intValue() > 0) {
+        if (quierenVolver[tunelElegido].intValue() > 0) {//Si alguien quiere volver le damos paso, si no pasan los que quieran salir a la zona de riestgo
+
             puedeEntrarVuelta[tunelElegido].release();
+            ticketPasarTunel[tunelElegido].release();
+
         } else {
+
             puedeEntrarIda[tunelElegido].release();
+            ticketPasarTunel[tunelElegido].release();
+            puedeEntrarVuelta[tunelElegido].release();
+
         }
     }
     /*public void pasarTunelIda(int tunelElegido, Humano humano) throws BrokenBarrierException, InterruptedException {
@@ -264,7 +301,7 @@ public class Mapa  {
     public void entrarZonaDescanso(Humano humano) {
         lockZonaDescanso.lock();
         zonaRefugio.zonaDescanso.add(humano);
-        logger.info("[DESCANSO] Humano " + humano.getIde() + " entra en zona de descanso con comida: " + humano.getComida());
+        logger.info("[DESCANSO] Humano " + humano.getIde() + " entra en zona de descanso con comida: " + humano.getComida()+": "+ ahora.format(formato));
         lockZonaDescanso.unlock();
         if (humano.getComida() > 0) {
             zonaRefugio.addComida(humano.getComida());
@@ -499,6 +536,10 @@ public class Mapa  {
 
     public void setIniciado(boolean b) {
         this.iniciado = b;
+    }
+
+    public void finalizar() {
+        System.exit(0);
     }
 
 
