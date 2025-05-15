@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo.Config_log;
 import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo.Humano;
 import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo.Mapa;
 import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo.Zombie;
@@ -11,10 +12,12 @@ import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo.Zomb
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Logger;
 
 import static java.lang.Thread.sleep;
 
 public class PantallaJuegoController {
+    private static final Logger logger = Config_log.getLogger();
     public TextField txtTiempo;
     private Mapa mapa;
     public Button botonReanudar;
@@ -88,13 +91,13 @@ public class PantallaJuegoController {
                             recorrerZonaRiesgo();
                             recorrerZonaTuneles();
                         } catch (Exception e) {
-                            System.out.println("Error en el hilo que actualiza los gráficos generada en onBotonReanudar\n" + e.getMessage());
+                            logger.info("Error en el hilo que actualiza los gráficos generada en onBotonReanudar\n" + e.getMessage());
 
                         }
                     });
                     Thread.sleep(100);
                 } catch (Exception e) {
-                    System.out.println("Error en la función onBotonReanudar\n" + e.getMessage());
+                    logger.info("Error en la función onBotonReanudar\n" + e.getMessage());
 
                 }
             }
@@ -115,10 +118,10 @@ public class PantallaJuegoController {
                     listaIDesDescanso.add(humano.getIde());
                 }
             } catch (NullPointerException e) {
-                System.out.println("Error NullPointerException en la función recorrerZonaRefugio\n" + e.getMessage());
+                logger.info("Error NullPointerException en la función recorrerZonaRefugio\n" + e.getMessage());
 
             } catch (ConcurrentModificationException e) {
-                System.out.println("Error ConcurrentModificationException en la función recorrerZonaRefugio\n" + e.getMessage());
+                logger.info("Error ConcurrentModificationException en la función recorrerZonaRefugio\n" + e.getMessage());
 
             }
         }
@@ -128,9 +131,9 @@ public class PantallaJuegoController {
                     listaIDesComedor.add(humano.getIde());
                 }
             } catch (NullPointerException e) {
-                System.out.println("Error NullPointerException en la función recorrerZonaRefugio\n" + e.getMessage());
+                logger.info("Error NullPointerException en la función recorrerZonaRefugio\n" + e.getMessage());
             } catch (ConcurrentModificationException e) {
-                System.out.println("Error ConcurrentModificationException en la función recorrerZonaRefugio\n" + e.getMessage());
+                logger.info("Error ConcurrentModificationException en la función recorrerZonaRefugio\n" + e.getMessage());
 
             }
         }
@@ -140,10 +143,10 @@ public class PantallaJuegoController {
                     listaIDesZonaComun.add(humano.getIde());
                 }
             } catch (NullPointerException e) {
-                System.out.println("Error NullPointerException en la función recorrerZonaRefugio\n" + e.getMessage());
+                logger.info("Error NullPointerException en la función recorrerZonaRefugio\n" + e.getMessage());
 
             } catch (ConcurrentModificationException e) {
-                System.out.println("Error ConcurrentModificationException en la función recorrerZonaRefugio\n" + e.getMessage());
+                logger.info("Error ConcurrentModificationException en la función recorrerZonaRefugio\n" + e.getMessage());
 
             }
 
@@ -239,7 +242,7 @@ public class PantallaJuegoController {
                 }
             }
         }catch( Exception e){
-            System.out.println("Error en la función recorrerZonaTuneles\n" + e.getMessage());
+            logger.info("Error en la función recorrerZonaTuneles\n" + e.getMessage());
 
         }
         textTunel11.setText(listaIDesTunel0.toString());
@@ -308,7 +311,7 @@ public class PantallaJuegoController {
 
             }
         } catch (Exception e) {
-            System.out.println("Error en la función recorrerZonaRiesgo\n" + e.getMessage());
+            logger.info("Error en la función recorrerZonaRiesgo\n" + e.getMessage());
         }
         textRiesgo01.setText(listaIDHRiesgo0.toString());
         textRiesgo03.setText(listaIDHRiesgo1.toString());

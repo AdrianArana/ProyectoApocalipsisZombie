@@ -7,10 +7,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo.Config_log;
 import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo.Mapa;
 import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.VistaServidor;
 
+import java.util.logging.Logger;
+
 public class NombreController {
+    private static final Logger logger = Config_log.getLogger();
+
     private Mapa mapa;
     public TextField textFieldNombre;
     public Button continuarButton;
@@ -38,7 +43,7 @@ public class NombreController {
                 c.setMapa(mapa);
                 c.setNombre(nombreGuardadoString.toUpperCase());
             } catch (Exception e) {
-                System.out.println("Error en la función onSiguienteButtonClick:\n" + e.getMessage());
+                logger.info("Error en la función onSiguienteButtonClick:\n" + e.getMessage());
 
             }
         }
@@ -59,7 +64,7 @@ public class NombreController {
             stage.show();
 
         } catch (Exception e) {
-            System.out.println("Error en la función onVolverButtonClick:\n" + e.getMessage());
+            logger.info("Error en la función onVolverButtonClick:\n" + e.getMessage());
         }
     }
 

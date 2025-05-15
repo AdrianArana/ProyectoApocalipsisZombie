@@ -4,11 +4,16 @@ import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo.Config_log;
 import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo.RMIInterfaz;
+import java.util.logging.Logger;
+
 
 import java.rmi.RemoteException;
 
 public class VistaClienteController {
+    private static final Logger logger = Config_log.getLogger();
+
     public TextField humanosTunelesText0;
     public TextField humanosAreasInsegurasText0;
     public TextField zombisAreasInsegurasText0;
@@ -73,12 +78,12 @@ public class VistaClienteController {
                             rankingZombisText.setText(retornaValores.getMejoresZombies());
 
                         } catch (RemoteException e) {
-                            System.out.println("Error en la actualizacion de valores\n" + e.getMessage());
+                            logger.info("Error en la actualizacion de valores\n" + e.getMessage());
                         }
                     });
                     Thread.sleep(200);
                 } catch (Exception e) {
-                    System.out.println("Error en la actualizacion de valores\n" + e.getMessage());
+                    logger.info("Error en la actualizacion de valores\n" + e.getMessage());
                 }
             }
         });

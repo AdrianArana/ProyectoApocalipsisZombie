@@ -5,10 +5,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo.Config_log;
 import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo.Mapa;
 import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.VistaServidor;
 
+import java.util.logging.Logger;
+
 public class VentanaInicialController {
+    private static final Logger logger = Config_log.getLogger();
+
     public Button iniciarPartidaButton;
     private Mapa mapa;
     public void iniciarPartidaButtonClick(ActionEvent actionEvent) {
@@ -28,7 +33,7 @@ public class VentanaInicialController {
             c.setMapa(mapa);
 
         } catch (Exception e) {
-            System.out.println("Error en el boton que inicia la ventana nombre\n" + e.getMessage());
+            logger.info("Error en el boton que inicia la ventana nombre\n" + e.getMessage());
         }
 
     }
@@ -48,7 +53,7 @@ public class VentanaInicialController {
             stage.show();
 
         } catch (Exception e) {
-            System.out.println("Error en el boton de creditos en la primera ventana del servidor\n" + e.getMessage());
+            logger.info("Error en el boton de creditos en la primera ventana del servidor\n" + e.getMessage());
         }
 
     }
