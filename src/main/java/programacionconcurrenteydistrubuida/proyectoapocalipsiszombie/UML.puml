@@ -1,0 +1,76 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+' Clase Mapa
+class Mapa {
+  - zonaRefugio: ZonaRefugio
+  - zonaRiesgo: ZonaRiesgo
+  - zonaTuneles: ZonaTuneles
+  + getZonaRefugio(): ZonaRefugio
+  + getZonaRiesgo(): ZonaRiesgo
+  + getZonaTuneles(): ZonaTuneles
+}
+
+' Clase Humano
+class Humano {
+  - id: String
+  - comida: int
+  - mapa: Mapa
+  - marcado: boolean
+  - siendoAtacado: boolean
+  - muerte: boolean
+  - lock: Object
+  + Humano(mapa: Mapa, id: String)
+  + getIde(): String
+  + morir(muerto: boolean): void
+  + run(): void
+}
+
+' Clase Zombie
+class Zombie {
+  - id: String
+  - mapa: Mapa
+  - humanoObjetivo: Humano
+  + Zombie(mapa: Mapa, id: String)
+  + run(): void
+  + buscarHumano(): Humano
+  + atacar(h: Humano): void
+}
+
+' Clase ZonaRefugio
+class ZonaRefugio {
+  - zonaComun: List<Humano>
+  + agregarHumano(h: Humano): void
+  + removerHumano(h: Humano): void
+}
+
+' Clase ZonaRiesgo
+class ZonaRiesgo {
+  - listaHumanos: List<Humano>
+  - listaZombies: List<Zombie>
+  + agregarHumano(h: Humano): void
+  + agregarZombie(z: Zombie): void
+  + removerHumano(h: Humano): void
+  + removerZombie(z: Zombie): void
+}
+
+' Clase ZonaTuneles
+class ZonaTuneles {
+  - tuneles: List<Object>
+  + agregarElemento(e: Object): void
+  + obtenerTunelAleatorio(): Object
+}
+
+' Relaciones
+Humano --> Mapa
+Zombie --> Mapa
+Mapa --> ZonaRefugio
+Mapa --> ZonaRiesgo
+Mapa --> ZonaTuneles
+ZonaRiesgo --> Humano
+ZonaRiesgo --> Zombie
+ZonaRefugio --> Humano
+ZonaTuneles --> Object
+
+@enduml

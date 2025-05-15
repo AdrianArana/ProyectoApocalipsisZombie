@@ -44,7 +44,6 @@ public class Humano extends Thread {
                 mapa.verificarPausa();
                 dormir(3000 + (int) (Math.random() * 2000));//Tiempo en la zona de riesgo
                 if (muerte) {
-
                     break;
                 } else {
                     if (marcado) {

@@ -271,35 +271,35 @@ public class PantallaJuegoController {
         ArrayList<String> listaIDZRiesgo1 = new ArrayList<>();
         ArrayList<String> listaIDZRiesgo2 = new ArrayList<>();
         ArrayList<String> listaIDZRiesgo3 = new ArrayList<>();
-        if (!mapa.getZonaRiesgo().getZonas()[0].isEmpty()) {
-            for (Thread thread : mapa.getZonaRiesgo().getZonas()[0]) {
-                if (thread instanceof Humano) {
-                    listaIDHRiesgo0.add(((Humano) thread).getIde());
-                } else {
-                    listaIDZRiesgo0.add(((Zombie) thread).getIde());
+        try {
+            if (!mapa.getZonaRiesgo().getZonas()[0].isEmpty()) {
+                for (Thread thread : mapa.getZonaRiesgo().getZonas()[0]) {
+                    if (thread instanceof Humano) {
+                        listaIDHRiesgo0.add(((Humano) thread).getIde());
+                    } else {
+                        listaIDZRiesgo0.add(((Zombie) thread).getIde());
+                    }
                 }
             }
-        }
-        if (!mapa.getZonaRiesgo().getZonas()[1].isEmpty()) {
-            for (Thread thread : mapa.getZonaRiesgo().getZonas()[1]) {
-                if (thread instanceof Humano) {
-                    listaIDHRiesgo1.add(((Humano) thread).getIde());
-                } else {
-                    listaIDZRiesgo1.add(((Zombie) thread).getIde());
+            if (!mapa.getZonaRiesgo().getZonas()[1].isEmpty()) {
+                for (Thread thread : mapa.getZonaRiesgo().getZonas()[1]) {
+                    if (thread instanceof Humano) {
+                        listaIDHRiesgo1.add(((Humano) thread).getIde());
+                    } else {
+                        listaIDZRiesgo1.add(((Zombie) thread).getIde());
+                    }
                 }
             }
-        }
-        if (!mapa.getZonaRiesgo().getZonas()[2].isEmpty()) {
-            for (Thread thread : mapa.getZonaRiesgo().getZonas()[2]) {
-                if (thread instanceof Humano) {
-                    listaIDHRiesgo2.add(((Humano) thread).getIde());
-                } else {
-                    listaIDZRiesgo2.add(((Zombie) thread).getIde());
+            if (!mapa.getZonaRiesgo().getZonas()[2].isEmpty()) {
+                for (Thread thread : mapa.getZonaRiesgo().getZonas()[2]) {
+                    if (thread instanceof Humano) {
+                        listaIDHRiesgo2.add(((Humano) thread).getIde());
+                    } else {
+                        listaIDZRiesgo2.add(((Zombie) thread).getIde());
+                    }
                 }
             }
-        }
-        if (!mapa.getZonaRiesgo().getZonas()[3].isEmpty()) {
-            try {
+            if (!mapa.getZonaRiesgo().getZonas()[3].isEmpty()) {
                 for (Thread thread : mapa.getZonaRiesgo().getZonas()[3]) {
 
                     if (thread instanceof Humano) {
@@ -308,8 +308,9 @@ public class PantallaJuegoController {
                         listaIDZRiesgo3.add(((Zombie) thread).getIde());
                     }
                 }
-            } catch (Exception e) {
+
             }
+        } catch (Exception e) {
         }
         textRiesgo01.setText(listaIDHRiesgo0.toString());
         textRiesgo03.setText(listaIDHRiesgo1.toString());
