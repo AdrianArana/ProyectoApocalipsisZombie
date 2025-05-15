@@ -143,6 +143,7 @@ public class Mapa  {
 
 
         sleep(1000);
+        verificarPausa();
         zonaTuneles.tuneles[tunelElegido].remove(humano);
         logger.info("Humano " + humano.getIde() + " sale del tunel: "+tunelElegido);
 

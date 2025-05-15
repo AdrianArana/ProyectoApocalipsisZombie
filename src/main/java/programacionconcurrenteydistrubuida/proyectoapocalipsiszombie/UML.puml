@@ -1,76 +1,200 @@
-@startuml
-skinparam classAttributeIconSize 0
-skinparam linetype ortho
+@startuml ApocalipsisZombie
 
-' Clase Mapa
+interface RMIInterfaz {
+  + finalizar(): void
+  + getNumeroHumanosEsperaIda(i: int): int
+  + getNumeroHumanosEsperaVuelta(i: int): int
+  + getIniciado(): boolean
+  + getMejoresZombies(): String
+  + getNumeroHumanosRefugio(): int
+  + getNumeroHumanosTunel(tunel: int): int
+  + getNumeroHumanosZonaRiesgo(zona: int): int
+  + getNumeroZombiesZonaRiesgo(zona: int): int
+  + setParado(parado: boolean): void
+}
+
+class RetornaValores {
+  - mapa: Mapa
+  + RetornaValores(mapa: Mapa)
+  + finalizar(): void
+  + getNumeroHumanosEsperaIda(i: int): int
+  + getNumeroHumanosEsperaVuelta(i: int): int
+  + getIniciado(): boolean
+  + getMejoresZombies(): String
+  + getNumeroHumanosRefugio(): int
+  + getNumeroHumanosTunel(tunel: int): int
+  + getNumeroHumanosZonaRiesgo(zona: int): int
+  + getNumeroZombiesZonaRiesgo(zona: int): int
+  + setParado(parado: boolean): void
+}
+
 class Mapa {
   - zonaRefugio: ZonaRefugio
   - zonaRiesgo: ZonaRiesgo
   - zonaTuneles: ZonaTuneles
-  + getZonaRefugio(): ZonaRefugio
-  + getZonaRiesgo(): ZonaRiesgo
-  + getZonaTuneles(): ZonaTuneles
+  - pausado: boolean
+  - iniciado: boolean
+  - quierenVolver: AtomicInteger[]
+  - cb_tuneles: CyclicBarrier[]
+  - puedeEntrarIda: Semaphore[]
+  - puedeEntrarVuelta: Semaphore[]
+  - ticketPasarTunel: Semaphore[]
+  - lockZonaRiesgo: Lock[]
+  - lockZonaDescanso: Lock
+  - lockZonaComedor: Lock
+  - lockZonaComun: Lock
+  - locks_tuneles: Lock[]
+  - esperarComida: Condition
+  + Mapa()
+  + pasarTunelIda(tunelElegido: int, humano: Humano)
+  + pasarTunelVuelta(tunelElegido: int, humano: Humano)
+  + entrarZonaDescanso(humano: Humano)
+  + salirZonaDescanso(humano: Humano)
+  + entrarZonaRiesgo(tunelTomado: int, humano: Humano)
+  + entrarZonaComedor(humano: Humano)
+  + salirZonaComedor(humano: Humano)
+  + entrarZonaComun(humano: Humano)
+  + cambiarDeZona(zonaInicial: int, zombie: Zombie): int
+  + atacar(zombie: Zombie, zonaZombie: int)
+  + verificarPausa()
+  + pausarHilos()
+  + reanudarHilos()
+  + finalizar()
 }
 
-' Clase Humano
+class ZonaRefugio {
+  - zonaComun: List<Humano>
+  - zonaDescanso: List<Humano>
+  - zonaComedor: List<Humano>
+  - almacen_comida: int
+  + getNumeroHumanos(): int
+  + addComida(cantidad: int)
+  + takeComida()
+}
+
+class ZonaRiesgo {
+  - zonas: List<Thread>[]
+}
+
+class ZonaTuneles {
+  - tuneles: List<Humano>[]
+  - zonasEsperaIda: List<Humano>[]
+  - zonasEsperaVuelta: List<Humano>[]
+}
+
 class Humano {
   - id: String
   - comida: int
-  - mapa: Mapa
   - marcado: boolean
   - siendoAtacado: boolean
   - muerte: boolean
-  - lock: Object
+  - mapa: Mapa
   + Humano(mapa: Mapa, id: String)
+  + run()
   + getIde(): String
-  + morir(muerto: boolean): void
-  + run(): void
+  + getComida(): int
+  + setComida(comida: int)
+  + marcarHumano()
+  + getSiendoAtacado(): boolean
+  + setSiendoAtacado(siendoAtacado: boolean)
+  + dormir(milis: int)
+  + morir(muerto: boolean)
 }
 
-' Clase Zombie
 class Zombie {
   - id: String
+  - zonaInicial: int
   - mapa: Mapa
-  - humanoObjetivo: Humano
-  + Zombie(mapa: Mapa, id: String)
-  + run(): void
-  + buscarHumano(): Humano
-  + atacar(h: Humano): void
-}
-
-' Clase ZonaRefugio
-class ZonaRefugio {
-  - zonaComun: List<Humano>
-  + agregarHumano(h: Humano): void
-  + removerHumano(h: Humano): void
-}
-
-' Clase ZonaRiesgo
-class ZonaRiesgo {
-  - listaHumanos: List<Humano>
-  - listaZombies: List<Zombie>
-  + agregarHumano(h: Humano): void
-  + agregarZombie(z: Zombie): void
-  + removerHumano(h: Humano): void
-  + removerZombie(z: Zombie): void
-}
-
-' Clase ZonaTuneles
-class ZonaTuneles {
-  - tuneles: List<Object>
-  + agregarElemento(e: Object): void
-  + obtenerTunelAleatorio(): Object
+  - kills: int
+  + Zombie(id: String, mapa: Mapa, zonaInicial: int)
+  + run()
+  + getIde(): String
+  + sumarKills()
+  + getNumeroKills(): int
+  + dormir(milis: int)
 }
 
 ' Relaciones
+RetornaValores ..|> RMIInterfaz
+RetornaValores --> Mapa
+
+Mapa "1" *-- "1" ZonaRefugio
+Mapa "1" *-- "1" ZonaRiesgo
+Mapa "1" *-- "1" ZonaTuneles
+
 Humano --> Mapa
 Zombie --> Mapa
-Mapa --> ZonaRefugio
-Mapa --> ZonaRiesgo
-Mapa --> ZonaTuneles
-ZonaRiesgo --> Humano
-ZonaRiesgo --> Zombie
-ZonaRefugio --> Humano
-ZonaTuneles --> Object
+
+' Controladores
+class FinJuego {
+  - salirButton: Button
+  + onSalirButtonClick(actionEvent: ActionEvent)
+}
+
+class VistaClienteController {
+  - humanosTunelesText0: TextField
+  - humanosAreasInsegurasText0: TextField
+  - zombisAreasInsegurasText0: TextField
+  - parado: boolean
+  - retornaValores: RMIInterfaz
+  + iniciarActualizacionDeValores()
+  + onEjecucionButtonClick(actionEvent: ActionEvent)
+  + setRetornaValores(mapa: RMIInterfaz)
+}
+
+class VentanaPrincipalController {
+  - mapa: Mapa
+  - botonIniciar: Button
+  - escenaPrincipal: Stage
+  + setStage(stage: Stage)
+  + setMapa(mapa: Mapa)
+  + botonIniciarClick()
+}
+
+class VentanaInicialController {
+  - mapa: Mapa
+  - iniciarPartidaButton: Button
+  + iniciarPartidaButtonClick(actionEvent: ActionEvent)
+  + setMapa(mapa: Mapa)
+  + onCreditosButtonClick(actionEvent: ActionEvent)
+}
+
+class NombreController {
+  - mapa: Mapa
+  - textFieldNombre: TextField
+  - continuarButton: Button
+  - VolverButton: Button
+  - labelError: Label
+  - nombreGuardadoString: String
+  + onSiguienteButtonClick(actionEvent: ActionEvent)
+  + onVolverButtonClick(actionEvent: ActionEvent)
+  + setMapa(mapa: Mapa)
+}
+
+class PantallaJuegoController {
+  - mapa: Mapa
+  - finalizarButton: Button
+  - txtTiempo: TextField
+  - botonReanudar: Button
+  + setData(mapa: Mapa)
+  + onBotonReanudar(actionEvent: ActionEvent)
+  + recorrerZonaRefugio()
+  + recorrerZonaTuneles()
+  + recorrerZonaRiesgo()
+  + pararTodo()
+  + onFinalizarButton(actionEvent: ActionEvent)
+}
+
+class CreditosController {
+  - VolverButton: Button
+  + onVolverButtonClick(actionEvent: ActionEvent)
+}
+
+' Relaciones controladores
+VistaClienteController --> RMIInterfaz
+VentanaPrincipalController --> Mapa
+VentanaInicialController --> Mapa
+NombreController --> Mapa
+PantallaJuegoController --> Mapa
 
 @enduml

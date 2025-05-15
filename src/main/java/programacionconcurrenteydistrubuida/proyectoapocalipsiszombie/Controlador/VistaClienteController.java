@@ -102,9 +102,4 @@ public class VistaClienteController {
         this.retornaValores = mapa;
     }
 
-    public void onFinalizarButton(ActionEvent actionEvent) throws RemoteException {
-        retornaValores.finalizar();
-        System.exit(0);
-        //todo
-    }
 }

@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="719.0" prefWidth="1164.0" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Controlador.PantallaJuegoController">
+<AnchorPane prefHeight="719.0" prefWidth="1164.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Controlador.PantallaJuegoController">
     <children>
         <!-- Título principal -->
         <Label alignment="CENTER" layoutX="351.0" layoutY="26.0" prefHeight="40.0" prefWidth="300.0" style="-fx-font-weight: bold; -fx-font-size: 24; -fx-background-color: #e0e0e0; -fx-border-color: #bdbdbd; -fx-border-width: 1;" text="APOCALIPSIS ZOMBIE" textAlignment="CENTER" />
@@ -152,7 +152,6 @@
                     </children>
                 </HBox>
             <TextField fx:id="txtTiempo" editable="false" prefHeight="36.0" prefWidth="63.0" style="-fx-font-size: 16;" />
-                <Button fx:id="finalizarButton" mnemonicParsing="false" onAction="#onFinalizarButton" style="-fx-font-size: 15; -fx-background-color: #ff4444; -fx-text-fill: white;" text="Finalizar Partida" />
             </children>
         </HBox>
     </children>
