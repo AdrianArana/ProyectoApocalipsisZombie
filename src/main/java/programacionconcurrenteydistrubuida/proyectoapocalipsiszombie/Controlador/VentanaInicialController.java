@@ -1,22 +1,22 @@
 package programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Controlador;
 
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.VistaPrincipal;
+import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo.Mapa;
+import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.VistaServidor;
 
 public class VentanaInicialController {
     public Button iniciarPartidaButton;
-
+    private Mapa mapa;
     public void iniciarPartidaButtonClick(ActionEvent actionEvent) {
         Stage stageAntiguo = (Stage) iniciarPartidaButton.getScene().getWindow();
         stageAntiguo.close();
         Stage stage = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader(VistaPrincipal.class.getResource("nombre.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(VistaServidor.class.getResource("nombre.fxml"));
+
         try {
             Scene scene = new Scene(fxmlLoader.load(), 800, 600);
             stage.setTitle("Apocalipsis Zombie");
@@ -24,6 +24,8 @@ public class VentanaInicialController {
             stage.setResizable(false);
             stage.centerOnScreen();
             stage.show();
+            NombreController c = fxmlLoader.getController();
+            c.setMapa(mapa);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -31,9 +33,12 @@ public class VentanaInicialController {
 
     }
 
+    public void setMapa(Mapa mapa) {
+        this.mapa = mapa;
+    }
     public void onCreditosButtonClick(ActionEvent actionEvent) {
         Stage stage = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader(VistaPrincipal.class.getResource("creditos.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(VistaServidor.class.getResource("creditos.fxml"));
         try {
             Scene scene = new Scene(fxmlLoader.load(), 800, 600);
             stage.setTitle("Creditos de Apocalipsis Zombie");
@@ -46,11 +51,5 @@ public class VentanaInicialController {
             e.printStackTrace();
         }
 
-    }
-
-    public void loadUserData(String nombreGuardadoString) {
-    }
-
-    public void setStage(Stage stage) {
     }
 }

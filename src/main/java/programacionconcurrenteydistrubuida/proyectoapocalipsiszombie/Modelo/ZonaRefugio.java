@@ -1,7 +1,6 @@
 package programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo;
 
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class ZonaRefugio {
     ArrayList<Humano> zonaDescanso;
@@ -9,9 +8,9 @@ public class ZonaRefugio {
     ArrayList<Humano> zonaComun;
 
     public ZonaRefugio() {
-        this.zonaDescanso= new ArrayList<Humano>();
-        this.zonaComedor=new ArrayList<Humano>();
-        this.zonaComun=new ArrayList<Humano>();
+        this.zonaDescanso = new ArrayList<Humano>();
+        this.zonaComedor = new ArrayList<Humano>();
+        this.zonaComun = new ArrayList<Humano>();
     }
 
     public ArrayList<Humano> getZonaDescanso() {
@@ -38,7 +37,7 @@ public class ZonaRefugio {
         this.zonaComun = zonaComun;
     }
 
-    private int almacen_comida=1000;
+    private int almacen_comida = 0;
 
     public synchronized int getAlmacen_comida() {
         return almacen_comida;
@@ -49,6 +48,15 @@ public class ZonaRefugio {
     }
 
     public synchronized void takeComida() {
-        this.almacen_comida --;
+        this.almacen_comida--;
+    }
+
+    public synchronized int getNumeroHumanos() {
+        int total = 0;
+        total += zonaDescanso.size();
+        total += zonaComedor.size();
+        total += zonaComun.size();
+        return total;
+
     }
 }
