@@ -89,10 +89,10 @@ public class RetornaValores extends UnicastRemoteObject implements RMIInterfaz {
     @Override
     public void setParado(boolean parao) {
         if (parao) {
-            mapa.setPausado(parao);
+            mapa.setPausado(true);
             mapa.pausarHilos();
         } else {
-            mapa.setPausado(parao);
+            mapa.setPausado(false);
             mapa.reanudarHilos();
         }
     }

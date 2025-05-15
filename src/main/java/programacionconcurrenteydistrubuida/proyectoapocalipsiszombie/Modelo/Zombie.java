@@ -1,8 +1,11 @@
 package programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo;
 
 import java.util.Random;
+import java.util.logging.Logger;
 
 public class Zombie extends Thread {
+    private static final Logger logger = Config_log.getLogger();
+
     private final int zonaInicial;
     private final Mapa mapa;
 
@@ -37,9 +40,9 @@ public class Zombie extends Thread {
                 dormir(random.nextInt(1000) + 1000);
                 mapa.verificarPausa();
                 mapa.atacar(this, nuevaZona);
-                dormir(random.nextInt(1000) + 2000);
+                dormir(random.nextInt(1000));
             } catch (InterruptedException e) {
-                System.out.println("Excepcion en zombie:\n" + e.getMessage());
+                logger.info("Excepcion en zombie:\n" + e.getMessage());
                 interrupt();// Pa salir
             }
         }
@@ -50,7 +53,7 @@ public class Zombie extends Thread {
         try {
             sleep(milis);
         } catch (InterruptedException e) {
-            System.out.println(e.getMessage());
+            logger.info("Error en la función dormir en Zombie:\n"+e.getMessage());
         }
     }
 

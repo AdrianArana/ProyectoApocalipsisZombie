@@ -272,18 +272,22 @@ public class Mapa  {
                         }
                     }
                 }
-            }catch(Exception ignored){}
+            }catch(Exception e){
+                logger.info("Error en la función atacar: \n" + e.getMessage());
+
+            }
         }
         if (!posiblesAtaques.isEmpty()) {
             boolean gana = (((int) (Math.random() * 3)) == 0);
             Humano humanoAtacado = posiblesAtaques.get(random.nextInt(posiblesAtaques.size()));
             humanoAtacado.setSiendoAtacado(true);
             if (gana) {
-                if (zonaRiesgo.zonas[zonaZombie].remove(humanoAtacado)) {
+                //Para depuración
+                /*if (zonaRiesgo.zonas[zonaZombie].remove(humanoAtacado)) {
                     logger.info("HUMANO ELIMINADO CORRECTAMENTE");
                 } else {
                     logger.info("ERROR AL ELIMINAR A HUMANO: " + humanoAtacado.getIde());
-                }
+                }*/
                 logger.info("Zombie " + zombie.getIde() + " mata a humano " + humanoAtacado.getIde());
                 humanoAtacado.morir(true);
                 Thread.sleep(random.nextInt(500) + 1000);

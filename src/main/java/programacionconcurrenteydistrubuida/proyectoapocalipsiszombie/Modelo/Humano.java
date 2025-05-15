@@ -2,8 +2,11 @@ package programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo;
 
 import java.util.Random;
 import java.util.concurrent.BrokenBarrierException;
+import java.util.logging.Logger;
 
 public class Humano extends Thread {
+    private static final Logger logger = Config_log.getLogger();
+
     private final String id;
     private int comida;
     Mapa mapa;
@@ -86,10 +89,9 @@ public class Humano extends Thread {
                     dormir(2000);
                 }
 
-            } catch (BrokenBarrierException e) {
-                throw new RuntimeException(e);
-            } catch (InterruptedException e) {
-                System.out.printf("El humano con id: " + id + " ha sido convertido en zombie\n");
+            } catch (BrokenBarrierException | InterruptedException e) {
+                logger.info("Error en el humano:\n"+e.getMessage());
+
             }
         }
         mapa.borrarHumanodelRiesgo(this);

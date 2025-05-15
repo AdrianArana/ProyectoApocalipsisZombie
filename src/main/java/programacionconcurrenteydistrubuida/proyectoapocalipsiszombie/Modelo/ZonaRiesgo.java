@@ -13,9 +13,5 @@ public class ZonaRiesgo {
         zonas[1] = new ArrayList<>();
         zonas[2] = new ArrayList<>();
         zonas[3] = new ArrayList<>();
-
     }
-
-
-
 }

@@ -37,7 +37,6 @@ public class VistaServidor extends Application {
             Naming.rebind("//localHost/ObjetoRetornaValores", mapaSimulacion);
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 }
