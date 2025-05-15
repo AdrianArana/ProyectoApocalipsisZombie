@@ -37,7 +37,10 @@ public class Zombie extends Thread {
                 nuevaZona = mapa.cambiarDeZona(nuevaZona, this);
                 dormir(random.nextInt(1000) + 1000);
                 mapa.verificarPausa();
-                mapa.atacar(this, nuevaZona);
+                mapa.atacar(this, nuevaZona);                dormir(random.nextInt(1000) + 2000);
+
+
+
             } catch (InterruptedException e) {
                 System.out.println("Excepcion en zombie");
             }
