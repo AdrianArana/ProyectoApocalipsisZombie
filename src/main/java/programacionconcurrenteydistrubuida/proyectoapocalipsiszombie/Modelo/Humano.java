@@ -5,7 +5,7 @@ import java.util.concurrent.BrokenBarrierException;
 
 public class Humano extends Thread {
     private String id;
-    private int comida;//H____
+    private int comida;
     Mapa mapa;
     private boolean marcado;
     Random random = new Random();

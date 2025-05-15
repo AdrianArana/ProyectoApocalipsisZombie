@@ -100,25 +100,6 @@ public class PantallaJuegoController {
             }
         });
         actualizarGraficos.start();
-            /*
-            ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-
-            scheduler.scheduleAtFixedRate(() -> {
-                try {
-                    mapa.verificarPausa();
-
-                    // Actualizar el tiempo
-                    txtTiempo.setText("" + (Integer.parseInt(txtTiempo.getText()) + 1));
-
-                    // Actualizar las zonas
-                    recorrerZonaRefugio();
-                    recorrerZonaRiesgo();
-                    recorrerZonaTuneles();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    scheduler.shutdown();
-                }
-            }, 0, 1, TimeUnit.SECONDS);*/
 
     }
 
@@ -325,28 +306,5 @@ public class PantallaJuegoController {
 
     public void pararTodo() {
         System.exit(0);
-    }
-
-    public void onFinalizarButton(ActionEvent actionEvent) {
-
-        pararTodo();
-
-
-        Stage stageAntiguo = (Stage) finalizarButton.getScene().getWindow();
-        stageAntiguo.close();
-        Stage stage = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader(VistaServidor.class.getResource("finJuego.fxml"));
-        try {
-            Scene scene = new Scene(fxmlLoader.load(), 800, 600);
-            stage.setTitle("Apocalipsis Zombie ACABADO");
-            stage.setScene(scene);
-            stage.setResizable(false);
-            stage.centerOnScreen();
-            stage.show();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 }

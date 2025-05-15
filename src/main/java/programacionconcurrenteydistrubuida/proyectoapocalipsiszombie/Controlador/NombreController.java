@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo.Mapa;
 import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.VistaServidor;
 
-public class NombreController {////SEGUNDA VENTANA
+public class NombreController {
     private Mapa mapa;
     public TextField textFieldNombre;
     public Button continuarButton;

@@ -10,7 +10,6 @@ import programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.VistaServid
 public class VentanaPrincipalController {
     private Mapa mapa;
     public Button botonIniciar;
-    ////TERCERA VENTANA
 
     private Stage escenaPrincipal;
 

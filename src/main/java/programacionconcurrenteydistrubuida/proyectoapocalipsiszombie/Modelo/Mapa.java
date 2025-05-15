@@ -1,7 +1,5 @@
 package programacionconcurrenteydistrubuida.proyectoapocalipsiszombie.Modelo;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.BrokenBarrierException;
@@ -53,7 +51,6 @@ public class Mapa  {
 
 
     Random random = new Random();
-    //private int kills = 0;
     private final AtomicInteger[] quierenVolver = {
             new AtomicInteger(0), new AtomicInteger(0), new AtomicInteger(0), new AtomicInteger(0)
     };
@@ -82,38 +79,17 @@ public class Mapa  {
     Lock[] locks_tuneles = new Lock[]{new ReentrantLock(), new ReentrantLock(), new ReentrantLock(), new ReentrantLock()};
 
 
-    /*Condition[] espera_ida = new Condition[]{locks_tuneles[0].newCondition(), locks_tuneles[1].newCondition(), locks_tuneles[2].newCondition(), locks_tuneles[3].newCondition()};
-    //Para que esperen los individuos a que pasen los que vueven al salir a la zona de riesgo
-    Condition[] espera_vuelta = new Condition[]{locks_tuneles[0].newCondition(), locks_tuneles[1].newCondition(), locks_tuneles[2].newCondition(), locks_tuneles[3].newCondition()};
-
-    boolean[] tuneles_ocupados = new boolean[]{false, false, false, false};
-*/
     Condition esperarComida = lockZonaComedor.newCondition();
 
-    //HUMANO:
-    // En la clase Mapa, añade estos nuevos campos:
-    private final ReentrantLock[] tunelLocks = {
-            new ReentrantLock(true), // fair lock para evitar inanición
-            new ReentrantLock(true),
-            new ReentrantLock(true),
-            new ReentrantLock(true)
-    };
-    private final Semaphore[] IDA = {
-            new Semaphore(1, true), new Semaphore(1, true), new Semaphore(1, true), new Semaphore(1, true)
-    };
-    private final Semaphore[] VUELTA = {
-            new Semaphore(1, true), new Semaphore(1, true), new Semaphore(1, true), new Semaphore(1, true)
-    };
 
-    private final Semaphore[] TICKET = {
-            new Semaphore(1), new Semaphore(1), new Semaphore(1), new Semaphore(1)
-    };
     public void borrarHumanodelRiesgo(Humano h) {
         for (int i = 0; i < 4; i++) {
             zonaRiesgo.zonas[i].remove(h);
         }
     }
 
+
+    //HUMANO
 
     public void pasarTunelIda(int tunelElegido, Humano humano) throws BrokenBarrierException, InterruptedException {
         // Esperar a que haya 3 humanos para formar grupo

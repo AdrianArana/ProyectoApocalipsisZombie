@@ -29,8 +29,7 @@ public class Zombie extends Thread {
 
     @Override
     public void run() {
-        mapa.zonaRiesgo.zonas[zonaInicial].add(this); ///cuando construimos el zombie le pasamos una zona,
-        /// se usa por ejemplo en la funcion de atarcar en Mapa
+        mapa.zonaRiesgo.zonas[zonaInicial].add(this);
         int nuevaZona = zonaInicial;
         while (true) {
             try {
